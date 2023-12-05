@@ -1,14 +1,12 @@
-import express, {Request,Response,Application} from 'express';
+import { app } from './middleware/middleware';
+import { Request, Response, Application } from 'express';
 
-const app:Application = express();
+const PORT = process.env.PORT || 8080;
 
-// Server listening
-const PORT = process.env.PORT || 8000;
-
-app.get("/", (req:Request, res:Response):void => {
-  res.send("Hello Typescript with Node.js!")
+app.get("/", (req: Request, res: Response): void => {
+  res.send("Hello Typescript with Node.js! Connected");
 });
 
-app.listen(PORT, ():void => {
+app.listen(PORT, (): void => {
   console.log(`Server is running on port ${PORT}`);
 });
