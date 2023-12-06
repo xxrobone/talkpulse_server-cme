@@ -1,7 +1,7 @@
-import express, {Request,Response,Application} from 'express';
+import express, {Express, Application} from 'express';
 const cors = require('cors');
 
-const app: Application = express();
+const app: Express = express();
 
 app.use(
   cors({
