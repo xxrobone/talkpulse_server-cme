@@ -1,4 +1,4 @@
-import express, { Request, Response, Application } from 'express';
+import { Request, Response } from 'express';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import { app } from './middleware/middleware';
