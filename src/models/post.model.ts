@@ -1,13 +1,14 @@
 import { Document, Schema, model, Types } from 'mongoose';
 
-interface Post extends Document {
+interface IPost extends Document {
+  delete(): unknown;
   title: string;
   link: string;
   body: string;
   user_id: Types.ObjectId;
 }
 
-const PostSchema = new Schema<Post>(
+const PostSchema = new Schema<IPost>(
   {
     title: {
       type: String,
@@ -30,4 +31,7 @@ const PostSchema = new Schema<Post>(
   { timestamps: true }
 );
 
-export default model<Post>('Post', PostSchema);
+const PostModel = model<IPost>('Post', PostSchema);
+
+export default PostModel;
+export { IPost };
