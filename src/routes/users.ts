@@ -1,6 +1,5 @@
 import { Router, Request, Response } from 'express';
 import User, { IUser } from '../models/user.model';
-import Post from '../models/post.model';
 import bcrypt from 'bcrypt';
 
 const router = Router();
