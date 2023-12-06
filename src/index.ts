@@ -1,5 +1,8 @@
 import { app } from './middleware/middleware';
 import { Request, Response, Application } from 'express';
+import dotenv from 'dotenv'; 
+
+dotenv.config();
 
 const PORT = process.env.PORT || 8080;
 
