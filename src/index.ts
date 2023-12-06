@@ -1,6 +1,7 @@
 import { app } from './middleware/middleware';
 import { Request, Response, Application } from 'express';
 import dotenv from 'dotenv'; 
+const mongoose = require('mongoose');
 
 dotenv.config();
 
@@ -13,3 +14,4 @@ app.get("/", (req: Request, res: Response): void => {
 app.listen(PORT, (): void => {
   console.log(`Server is running on port ${PORT}`);
 });
+
