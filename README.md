@@ -6,15 +6,18 @@ Creating a mern stack app - reddit inspired
 
 TECH:
 node
-bcrypt
-cors
-dotenv
 express
 mongodb
 mongoose
 nodemon
+postman
+cors
+dotenv
+bcrypt
 
 JWT
+
+
 
 Structure (to follow, might change it)
 
