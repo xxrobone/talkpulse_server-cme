@@ -6,6 +6,8 @@ interface IUser extends Document {
   password: string;
   profileImage: string;
   role: string;
+  createdAt: Date,
+  updatedAt: Date
 }
 
 const UserSchema = new Schema<IUser>(
@@ -14,6 +16,7 @@ const UserSchema = new Schema<IUser>(
       type: String,
       required: true,
       unique: true,
+      trim: true
     },
     email: {
       type: String,
@@ -37,7 +40,7 @@ const UserSchema = new Schema<IUser>(
   { timestamps: true }
 );
 
-const UserModel = model<IUser>('User', UserSchema);;
+const UserModel = model<IUser>('User', UserSchema);
 
 export default UserModel;
 export { IUser };
