@@ -40,24 +40,33 @@ router.put('/:id', async (req: Request, res: Response) => {
   }
 });
 
-// Delete Post
-router.delete('/:id', async (req: Request, res: Response) => {
-  try {
-    const post = await PostModel.findById(req.params.id);
-    if (post && post.userId.toString() === req.body.userId) {
-      try {
-        await post.delete();
-        res.status(200).json('Post deleted');
-      } catch (err) {
-        res.status(500).json(err);
+// Delete post
+router.delete('/:postId/:userId', async (req: Request, res: Response) => {
+    try {
+      const postId = req.params.postId;
+      const userIdFromRequest = req.params.userId;
+  
+      const post = await PostModel.findById(postId);
+  
+      if (post) {
+        if (post.userId.toString() === userIdFromRequest) {
+          try {
+            await PostModel.deleteOne({ _id: postId });
+            res.status(200).json('Post deleted');
+          } catch (err) {
+            res.status(500).json(err);
+          }
+        } else {
+          res.status(401).json('You dont have permission to delete this Post');
+        }
+      } else {
+        res.status(404).json('Post not found');
       }
-    } else {
-      res.status(401).json('You dont have permission to delete this Post');
+    } catch (err) {
+      res.status(500).json(err);
     }
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
+  });
+  
 
 // Get Post
 router.get('/:id', async (req: Request, res: Response) => {
