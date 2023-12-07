@@ -5,6 +5,7 @@ interface IPost extends Document {
   title: string;
   link: string;
   body: string;
+  votes: number;
   user_id: Types.ObjectId;
 }
 
@@ -25,6 +26,10 @@ const PostSchema = new Schema<IPost>(
     user_id: {
       type: Schema.Types.ObjectId,
       ref: 'User',
+      required: true,
+    },
+    votes: {
+      type: Number,
       required: true,
     },
   },
