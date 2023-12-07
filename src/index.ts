@@ -15,6 +15,11 @@ const MongoURI: string | undefined = process.env.MONGO_DB_URI;
 //with docker
 const MongoDockerURI: string | undefined = process.env.MONGO_DOCKER_URI;
 
+/* if (!MongoURI) {
+  console.error('MongoDB URI is not provided in the environment variables.');
+  process.exit(1);
+} */
+
 if (!MongoDockerURI) {
   console.error('MongoDB URI is not provided in the environment variables.');
   process.exit(1);
