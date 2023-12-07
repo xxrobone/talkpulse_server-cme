@@ -6,8 +6,8 @@ interface IUser extends Document {
   password: string;
   profileImage: string;
   role: string;
-  createdAt: Date,
-  updatedAt: Date
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const UserSchema = new Schema<IUser>(
@@ -16,7 +16,7 @@ const UserSchema = new Schema<IUser>(
       type: String,
       required: true,
       unique: true,
-      trim: true
+      trim: true,
     },
     email: {
       type: String,
@@ -26,16 +26,16 @@ const UserSchema = new Schema<IUser>(
     password: {
       type: String,
       required: true,
-      select: false
+      select: false,
     },
     profileImage: {
       type: String,
-      default: "",
+      default: '',
     },
     role: {
       type: String,
       default: 'User',
-    }
+    },
   },
   { timestamps: true }
 );

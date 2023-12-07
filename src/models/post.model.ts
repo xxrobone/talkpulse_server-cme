@@ -2,11 +2,13 @@ import { Document, Schema, model, Types } from 'mongoose';
 
 interface IPost extends Document {
   delete(): unknown;
+  username: string;
+  userId: Types.ObjectId;
   title: string;
   link: string;
   body: string;
-  votes: number;
-  user_id: Types.ObjectId;
+  upvotes: number;
+  downvotes: number;
 }
 
 const PostSchema = new Schema<IPost>(
@@ -23,12 +25,20 @@ const PostSchema = new Schema<IPost>(
       type: String,
       required: true,
     },
-    user_id: {
+    username: {
+      type: String,
+      required: true,
+    },
+    userId: {
       type: Schema.Types.ObjectId,
       ref: 'User',
       required: true,
     },
-    votes: {
+    upvotes: {
+      type: Number,
+      required: true,
+    },
+    downvotes: {
       type: Number,
       required: true,
     },

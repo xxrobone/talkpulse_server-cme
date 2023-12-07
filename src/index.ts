@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import { app } from './middleware/middleware';
 import authRoute from './routes/auth';
 import userRoute from './routes/users';
+import postRoute from './routes/posts';
 
 dotenv.config();
 
@@ -37,6 +38,7 @@ mongoose.connection.on('error', (err: Error) => console.log(err))
 // Routes
 app.use('/api/auth', authRoute);
 app.use('/api/users', userRoute);
+app.use('/api/posts', postRoute);
 
 // Server listening
 app.listen(PORT, (): void => {

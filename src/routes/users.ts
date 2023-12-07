@@ -19,7 +19,14 @@ router.put('/:id', async (req: Request, res: Response) => {
         },
         { new: true }
       );
-      res.status(200).json(updatedUser);
+
+      // Check if user was not found
+      if (!updatedUser) {
+        return res.status(404).json('User not found');
+      }
+
+      const { password, ...others } = updatedUser.toObject() as IUser;
+      res.status(200).json(others);
     } catch (err) {
       res.status(500).json(err);
     }
