@@ -14,8 +14,9 @@ postman
 cors
 dotenv
 bcrypt
+DOCKER
 
-JWT
+JWT (not yet added)
 
 
 
