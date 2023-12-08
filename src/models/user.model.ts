@@ -27,7 +27,6 @@ const UserSchema = new Schema<IUser>(
     password: {
       type: String,
       required: true,
-      select: false,
     },
     profileImage: {
       type: String,
@@ -48,12 +47,6 @@ UserSchema.pre('save', async function (next) {
   const hashedPassword = await bcrypt.hash(this.password, 10)
   this.password = hashedPassword
 })
-
-/* UserSchema.pre('validate', async function (next) {
-  if (this.isModified('password')) next()
-    
-  const validated = await bcrypt.compare(this.password, user.password);
-}) */
 
 const UserModel = model<IUser>('User', UserSchema);
 

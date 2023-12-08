@@ -36,9 +36,9 @@ mongoose.connect(MongoDockerURI)
 mongoose.connection.on('error', (err: Error) => console.log(err))
 
 // Routes
-app.use('/api/auth', authRoute);
-app.use('/api/users', userRoute);
-app.use('/api/posts', postRoute);
+app.use('/auth', authRoute);
+app.use('/users', userRoute);
+app.use('/posts', postRoute);
 
 // Server listening
 app.listen(PORT, (): void => {

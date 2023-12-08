@@ -1,7 +1,5 @@
-import { Router, Request, Response } from 'express';
-import User from '../models/user.model';
+import { Router } from 'express';
 import * as authController from '../controllers/authController'
-import bcrypt from 'bcrypt'
 
 const router = Router();
 
@@ -31,7 +29,7 @@ const router = Router();
 router.post('/signup', authController.register)
 
 // LOGIN USER
-router.post('/login', async (req: Request, res: Response) => {
+/* router.post('/login', async (req: Request, res: Response) => {
   const {username, password } = req.body
   try {
     const user = await User.findOne({ username: username }).select('+password');
@@ -44,13 +42,15 @@ router.post('/login', async (req: Request, res: Response) => {
     if (!validated) {
       return res.status(400).json('Wrong credentials!');
     }
-// protect password
+
     const { ...rest } = user.toObject(); 
 
     res.status(200).json(rest);
   } catch (err) {
     res.status(500).json(err);
   }
-});
+}); */
+
+router.post('/login', authController.logIn)
 
 export default router;
