@@ -41,12 +41,19 @@ const UserSchema = new Schema<IUser>(
   { timestamps: true }
 );
 
+// adding the hassed password transformation here is more secure in production
 UserSchema.pre('save', async function (next) {
   if (!this.isModified('password')) next()
   
   const hashedPassword = await bcrypt.hash(this.password, 10)
   this.password = hashedPassword
 })
+
+/* UserSchema.pre('validate', async function (next) {
+  if (this.isModified('password')) next()
+    
+  const validated = await bcrypt.compare(this.password, user.password);
+}) */
 
 const UserModel = model<IUser>('User', UserSchema);
 

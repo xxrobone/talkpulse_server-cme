@@ -1,11 +1,12 @@
 import { Router, Request, Response } from 'express';
 import User from '../models/user.model';
-import bcrypt from 'bcrypt';
+import * as authController from '../controllers/authController'
+import bcrypt from 'bcrypt'
 
 const router = Router();
 
 // REGISTER / SIGNUP USER
-router.post('/signup', async (req: Request, res: Response) => {
+/* router.post('/signup', async (req: Request, res: Response) => {
 
   const { username, password, email } = req.body
   try {
@@ -26,7 +27,8 @@ router.post('/signup', async (req: Request, res: Response) => {
   } catch (err) {
     res.status(500).json(err);
   }
-});
+}); */
+router.post('/signup', authController.register)
 
 // LOGIN USER
 router.post('/login', async (req: Request, res: Response) => {
