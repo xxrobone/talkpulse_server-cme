@@ -2,11 +2,9 @@ import express, { Request, Response, Express } from 'express';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 const cors = require('cors');
-import validateToken from './middleware/middleware';
 import authRoute from './routes/auth';
 import userRoute from './routes/users';
 import postRoute from './routes/posts';
-import * as authController from './controllers/authController'
 dotenv.config();
 
 const app: Express = express();
@@ -42,7 +40,7 @@ app.get("/", (req: Request, res: Response): void => {
   res.send("Hello Typescript with Node.js! Connected");
 });
 
-app.post('/profile', validateToken, authController.profile)
+/* app.post('/profile', validateToken, authController.profile) */
 
 mongoose.Promise = Promise
 
@@ -50,7 +48,7 @@ mongoose.connect(MongoDockerURI)
 mongoose.connection.on('error', (err: Error) => console.log(err))
 
 // Routes
-app.use('/auth', authRoute);
+app.use('/', authRoute);
 app.use('/users', userRoute);
 app.use('/posts', postRoute);
 

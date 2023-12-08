@@ -21,8 +21,8 @@ export const register = async (req: Request, res: Response) => {
       password,
     });
 
-    const user = await newUser.save();
-    res.status(200).json(user);
+    await newUser.save();
+      res.status(200).json({username, id: newUser.email});
   } catch (err) {
     res.status(500).json(err);
   }
