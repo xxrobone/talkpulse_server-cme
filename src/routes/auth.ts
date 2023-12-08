@@ -9,6 +9,12 @@ router.post('/signup', async (req: Request, res: Response) => {
 
   const { username, password, email } = req.body
   try {
+    if (await User.findOne({ username })) {
+      return res.status(400).json({message: "Username already in use, try an other name"})
+    }
+    if (await User.findOne({ email })) {
+      return res.status(400).json({message: "E-mail already in use"})
+    }
     const newUser = new User({
       username,
       email,
