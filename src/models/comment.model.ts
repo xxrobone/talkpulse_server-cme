@@ -4,6 +4,7 @@ interface IComment extends Document {
   body: string;
   user_id: Types.ObjectId;
   post_id: Types.ObjectId;
+  parentComment_id?: Types.ObjectId;
 }
 
 const CommentSchema = new Schema<IComment>(
@@ -21,6 +22,10 @@ const CommentSchema = new Schema<IComment>(
       type: Schema.Types.ObjectId,
       ref: 'Post',
       required: true,
+    },
+    parentComment_id: {
+      type: Schema.Types.ObjectId,
+      ref: 'Comment',
     },
   },
   { timestamps: true }

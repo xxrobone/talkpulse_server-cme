@@ -27,7 +27,6 @@ const router = Router();
     res.status(500).json(err);
   }
 }); */
-router.post('/signup', authController.register)
 
 // LOGIN USER
 /* router.post('/login', async (req: Request, res: Response) => {
@@ -51,6 +50,8 @@ router.post('/signup', authController.register)
     res.status(500).json(err);
   }
 }); */
+
+router.post('/signup', authController.register)
 
 router.post('/login', authController.logIn)
 
