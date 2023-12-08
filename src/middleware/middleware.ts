@@ -1,21 +1,12 @@
-import express, { Express, NextFunction, Request, Response } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken'
 const cors = require('cors');
 
-const app: Express = express();
-
-app.use(
-  cors({
-    origin: 'http://localhost:3000',
-    credentials: true,
-  })
-);
-
-const validation = (req: Request, res: Response, next: NextFunction) => {
-  //sök efter authorization header
+const validateToken = (req: Request, res: Response, next: NextFunction) => {
+  // check for authorization header
   const authHeader = req.headers['authorization'];
   
-  // läser ut jwt
+  // read jwt token
   const token = authHeader && authHeader.split(' ')[1]
 
   if (!token) {
@@ -23,7 +14,7 @@ const validation = (req: Request, res: Response, next: NextFunction) => {
   }
 
 
-  // kolla att jwt är giltig
+  // check for jwt validation
   const secret = process.env.JWT_SECRET;
   if (!secret) {
     throw Error('Missing secret token')
@@ -34,14 +25,12 @@ const validation = (req: Request, res: Response, next: NextFunction) => {
         return res.status(403).json({message: 'Not authorized'})
     }
     
+    // userId is declared in types / express
     req.userId = decodedToken.userId
     next()
   });
-  // läsa ut användar id från token
-  // lägga till userid på req
+  // check user id from token
+  // add user id in the token
 }
 
-app.use(express.json());
-
-
-export { app };
+  export default validateToken

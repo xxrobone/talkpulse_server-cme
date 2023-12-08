@@ -1,12 +1,24 @@
-import { Request, Response } from 'express';
+import express, { Request, Response, Express } from 'express';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
-import { app } from './middleware/middleware';
+const cors = require('cors');
+import validateToken from './middleware/middleware';
 import authRoute from './routes/auth';
 import userRoute from './routes/users';
 import postRoute from './routes/posts';
-
+import * as authController from './controllers/authController'
 dotenv.config();
+
+const app: Express = express();
+
+app.use(
+  cors({
+    origin: 'http://localhost:3000',
+    credentials: true,
+  })
+);
+
+app.use(express.json());
 
 const PORT: number = parseInt(process.env.PORT as string, 10) || 8000;
 
@@ -29,6 +41,8 @@ if (!MongoDockerURI) {
 app.get("/", (req: Request, res: Response): void => {
   res.send("Hello Typescript with Node.js! Connected");
 });
+
+app.post('/profile', validateToken, authController.profile)
 
 mongoose.Promise = Promise
 

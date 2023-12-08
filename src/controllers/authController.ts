@@ -55,3 +55,17 @@ export const logIn = async (req: Request, res: Response) => {
     res.status(500).json({ message: 'Something went wrong' });
   }
 };
+
+export const profile = async (req: Request, res: Response) => {
+    const { userId } = req
+
+    const user = await User.findById(userId)
+
+    if (!user) {
+        console.log('User not found with id: ', userId)
+       return res.status(404).json({message: 'User not found'})
+    }
+    res.status(200).json({
+        username: user.username
+    })
+}

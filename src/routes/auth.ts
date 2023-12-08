@@ -53,4 +53,6 @@ router.post('/signup', authController.register)
 
 router.post('/login', authController.logIn)
 
+
+
 export default router;
