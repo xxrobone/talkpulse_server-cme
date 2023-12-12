@@ -1,14 +1,16 @@
 import { Document, Schema, model, Types } from 'mongoose';
 
+
 interface IPost extends Document {
-  delete(): unknown;
-  username: string;
   userId: Types.ObjectId;
   title: string;
   link: string;
-  body: string;
+  content: string;
+  file: File;
+  image: String;
   upvotes: number;
   downvotes: number;
+  comments: [];
 }
 
 const PostSchema = new Schema<IPost>(
@@ -21,11 +23,15 @@ const PostSchema = new Schema<IPost>(
       type: String,
       required: true,
     },
-    body: {
-      type: String,
-      required: true,
+    file: {
+      type: File,
+      required: false,
     },
-    username: {
+    image: {
+      type: String,
+      public_id: String,
+    },
+    content: {
       type: String,
       required: true,
     },
@@ -42,6 +48,16 @@ const PostSchema = new Schema<IPost>(
       type: Number,
       required: true,
     },
+    comments: [
+      {
+        text: String,
+        created: { type: Date, default: Date.now },
+        author: {
+          type: Schema.Types.ObjectId,
+          ref: "User",
+        }
+      }
+    ]
   },
   { timestamps: true }
 );

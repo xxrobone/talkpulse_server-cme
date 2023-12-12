@@ -1,5 +1,5 @@
 // not shure if auth is better to put here or if it can be used in routes.
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import User from '../models/user.model';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
@@ -68,4 +68,11 @@ export const profile = async (req: Request, res: Response) => {
     res.status(200).json({
         username: user.username
     })
+}
+
+export const logout = (req: Request, res: Response, next: NextFunction) => {
+
+  // clear token / cookie
+  // send response success and message
+
 }
