@@ -37,7 +37,7 @@ router.post('/', async (req: Request, res: Response) => {
 router.put('/:id', async (req: Request, res: Response) => {
   try {
     const post = await PostModel.findById(req.params.id);
-    if (post?.userId.toString() === req.body.userId) {
+    if (post?.author.toString() === req.body.author) {
       try {
         const updatedPost = await PostModel.findByIdAndUpdate(
           req.params.id,
@@ -67,7 +67,7 @@ router.delete('/:postId/:userId', async (req: Request, res: Response) => {
       const post = await PostModel.findById(postId);
   
       if (post) {
-        if (post.userId.toString() === userIdFromRequest) {
+        if (post.author.toString() === userIdFromRequest) {
           try {
             await PostModel.deleteOne({ _id: postId });
             res.status(200).json('Post deleted');

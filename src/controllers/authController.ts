@@ -22,10 +22,10 @@ export const register = async (req: Request, res: Response) => {
     });
 
     await newUser.save();
-      res.status(201).json({username, id:  newUser._id});
+    res.status(201).json({ username, id: newUser._id });
   } catch (error) {
-    console.log(error)
-    res.status(500).json({ message: 'Internal server error'});
+    console.log(error);
+    res.status(500).json({ message: 'Internal server error' });
   }
 };
 
@@ -48,32 +48,71 @@ export const logIn = async (req: Request, res: Response) => {
     if (!secret) {
       throw Error('Missing secret token');
     }
-    const token = jwt.sign({ userId: user._id }, secret);
-    // protect password
+    const token = jwt.sign({ userId: user._id }, secret, { expiresIn: '2h' });
 
-    res.status(200).json({token, username:user.username});
+    const refreshTokenSecret = process.env.REFRESH_TOKEN_SECRET;
+    if (!refreshTokenSecret) {
+      throw Error('Missing REFRESH_TOKEN_SECRET');
+    }
+    // return refresh token
+    const refreshToken = jwt.sign({ userId: user._id }, refreshTokenSecret, {
+      expiresIn: '23h',
+    });
+
+    res.status(200).json({ token, refreshToken, username: user.username });
   } catch (err) {
     res.status(500).json({ message: 'Something went wrong' });
   }
 };
 
-export const profile = async (req: Request, res: Response) => {
-    const { userId } = req
+export const refreshJWT = async (req: Request, res: Response) => {
+  const { refreshToken } = req.body;
 
-    const user = await User.findById(userId)
+  const refreshTokenSecret = process.env.REFRESH_TOKEN_SECRET;
+  if (!refreshTokenSecret) {
+    throw Error('Missing REFRESH_TOKEN_SECRET');
+  }
 
-    if (!user) {
-        console.log('User not found with id: ', userId)
-       return res.status(404).json({message: 'User not found'})
+  try {
+    const decodedPayload = (await jwt.verify(
+      refreshToken,
+      refreshTokenSecret
+    )) as { userId: string };
+
+    const secret = process.env.JWT_SECRET;
+    if (!secret) {
+      throw Error('Missing JWT_SECRET');
     }
-    res.status(200).json({
-        username: user.username
-    })
-}
+
+    // Returnera JWT
+    const token = jwt.sign({ userId: decodedPayload.userId }, secret, {
+      expiresIn: '1h',
+    });
+
+    return res.status(200).json({
+      token,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(403).json({ message: 'invalid token' });
+  }
+};
+
+export const profile = async (req: Request, res: Response) => {
+  const { userId } = req;
+
+  const user = await User.findById(userId);
+
+  if (!user) {
+    console.log('User not found with id: ', userId);
+    return res.status(404).json({ message: 'User not found' });
+  }
+  res.status(200).json({
+    username: user.username,
+  });
+};
 
 export const logout = (req: Request, res: Response, next: NextFunction) => {
-
   // clear token / cookie
   // send response success and message
-
-}
+};
