@@ -1,7 +1,7 @@
 import express, { Request, Response, Express } from 'express';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
-const cors = require('cors');
+import cors from 'cors'
 import authRoute from './routes/auth';
 import userRoute from './routes/users';
 import postRoute from './routes/posts';
@@ -9,12 +9,7 @@ dotenv.config();
 
 const app: Express = express();
 
-app.use(
-  cors({
-    origin: 'http://localhost:3000',
-    credentials: true,
-  })
-);
+app.use(cors());
 
 app.use(express.json());
 

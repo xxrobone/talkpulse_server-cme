@@ -6,7 +6,6 @@ interface IPost extends Document {
   title: string;
   link: string;
   content: string;
-  file: File;
   image: String;
   upvotes: number;
   downvotes: number;
@@ -22,10 +21,6 @@ const PostSchema = new Schema<IPost>(
     link: {
       type: String,
       required: true,
-    },
-    file: {
-      type: File,
-      required: false,
     },
     image: {
       type: String,

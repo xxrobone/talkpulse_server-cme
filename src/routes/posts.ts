@@ -1,14 +1,14 @@
 import express, { Request, Response } from 'express';
 import PostModel, { IPost } from '../models/post.model';
-import { v2 as cloudinary, UploadApiResponse } from 'cloudinary';
-
+/* import { v2 as cloudinary, UploadApiResponse } from 'cloudinary';
+ */
 const router = express.Router();
 
-cloudinary.config({ 
+/* cloudinary.config({ 
   cloud_name: process.env.CLOUD_NAME, 
   api_key: process.env.CLOUD_API_KEY, 
   api_secret: process.env.CLOUD_SECRET 
-});
+}); */
 
 // will try to use cloudinary 
 /* NEEDS TO BE FIXED!!!  */
@@ -18,13 +18,13 @@ router.post('/', async (req: Request, res: Response) => {
   const newPost = new PostModel(newPostData);
   try {
     const { image } = req.body 
-    const img_upload = await cloudinary.uploader.upload(image, { 
+   /*  const img_upload = await cloudinary.uploader.upload(image, { 
       folder: 'posts',
       width: 1200,
       crop: 'scale'
-     }) as UploadApiResponse;
+     }) as UploadApiResponse; */
 
-    newPost.image = img_upload.secure_url;
+/*     newPost.image = img_upload.secure_url; */
 
     const savedPost = await newPost.save();
     res.status(200).json(savedPost);

@@ -22,7 +22,7 @@ export const register = async (req: Request, res: Response) => {
     });
 
     await newUser.save();
-      res.status(201).json({username, id: newUser.email});
+      res.status(201).json({username, id:  newUser._id});
   } catch (error) {
     console.log(error)
     res.status(500).json({ message: 'Internal server error'});
