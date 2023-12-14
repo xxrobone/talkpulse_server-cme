@@ -9,6 +9,7 @@ interface IUser extends Document {
   role: string;
   createdAt: Date;
   updatedAt: Date;
+  confirmed: Boolean;
 }
 
 const UserSchema = new Schema<IUser>(
@@ -26,6 +27,11 @@ const UserSchema = new Schema<IUser>(
     },
     password: {
       type: String,
+      required: true,
+    },
+    confirmed: {
+      type: Boolean,
+      default: false,
       required: true,
     },
     profileImage: {

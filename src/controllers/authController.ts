@@ -3,6 +3,8 @@ import { Request, Response, NextFunction } from 'express';
 import User from '../models/user.model';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+/* import verifyEmail from 'helpers/Email'; */
+import { assertDefined } from 'utils/assertDefined';
 
 export const register = async (req: Request, res: Response) => {
   const { username, password, email } = req.body;
@@ -21,6 +23,15 @@ export const register = async (req: Request, res: Response) => {
       password,
     });
 
+/*     const secret = process.env.JWT_SECRET;
+    if (!secret) {
+      throw Error('Missing secret token');
+    }
+    const emailToken = jwt.sign({
+      username
+    }, secret, { expiresIn: '1h' })
+    verifyEmail(username, email, emailToken) */
+
     await newUser.save();
     res.status(201).json({ username, id: newUser._id });
   } catch (error) {
@@ -28,6 +39,35 @@ export const register = async (req: Request, res: Response) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 };
+
+
+// verify token ====================================================
+/* export const verifyToken = async (req: Request, res: Response) => {
+  const { username, emailToken } = req.body;
+
+  try {
+    assertDefined(process.env.JWT_SECRET)
+
+    const decode = jwt.verify(emailToken, process.env.JWT_SECRET);
+    console.log(decode);
+
+    const verified = await User.updateOne(
+      { username },
+      {
+        $set: {
+          confirmed: true,
+        },
+      }
+    );
+
+    return res.json({ status: 'sign up successful, verified' });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+}; */
+
+// ===================================================================
 
 export const logIn = async (req: Request, res: Response) => {
   try {

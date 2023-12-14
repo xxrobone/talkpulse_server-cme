@@ -1,7 +1,9 @@
 import { Request, Response } from "express";
 import Post from "../models/post.model";
+import { assertDefined } from "../utils/assertDefined";
 
 export const create = async (req: Request, res: Response) => {
+    assertDefined(req.userId)
     const { title, link, content } = req.body;
 
     const post = new Post({

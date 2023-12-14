@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import PostModel, { IPost } from '../models/post.model';
+import * as postController from '../controllers/postController'
 /* import { v2 as cloudinary, UploadApiResponse } from 'cloudinary';
  */
 const router = express.Router();
@@ -13,25 +14,25 @@ const router = express.Router();
 // will try to use cloudinary 
 /* NEEDS TO BE FIXED!!!  */
 // Create new Post
-router.post('/', async (req: Request, res: Response) => {
+/* router.post('/', async (req: Request, res: Response) => {
   const newPostData: IPost = req.body;
   const newPost = new PostModel(newPostData);
   try {
     const { image } = req.body 
-   /*  const img_upload = await cloudinary.uploader.upload(image, { 
+    const img_upload = await cloudinary.uploader.upload(image, { 
       folder: 'posts',
       width: 1200,
       crop: 'scale'
-     }) as UploadApiResponse; */
+     }) as UploadApiResponse;
 
-/*     newPost.image = img_upload.secure_url; */
+    newPost.image = img_upload.secure_url;
 
     const savedPost = await newPost.save();
     res.status(200).json(savedPost);
   } catch (err) {
     res.status(500).json(err);
   }
-});
+}); */
 
 // Update Post
 router.put('/:id', async (req: Request, res: Response) => {
@@ -97,7 +98,7 @@ router.get('/:id', async (req: Request, res: Response) => {
 });
 
 // Get all Posts
-router.get('/', async (req: Request, res: Response) => {
+/* router.get('/', async (req: Request, res: Response) => {
   const { userId, cat } = req.query;
   try {
     let posts;
@@ -116,6 +117,8 @@ router.get('/', async (req: Request, res: Response) => {
   } catch (err) {
     res.status(500).json(err);
   }
-});
+}); */
+router.get('/', postController.getAllPosts)
+router.post('/', postController.create)
 
 export = router;

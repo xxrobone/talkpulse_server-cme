@@ -1,6 +1,7 @@
 import express, { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken'
 const cors = require('cors');
+import User from '../models/user.model';
 
 const validateToken = (req: Request, res: Response, next: NextFunction) => {
  
@@ -9,7 +10,7 @@ const validateToken = (req: Request, res: Response, next: NextFunction) => {
   const token = authHeader && authHeader.split(' ')[1]
 
   if (!token) {
-    return res.status(401).json({ message: 'Authorization denied' });
+    return res.status(401).json({ message: 'Unauthorized - Missing token' });
   }
 
   const secret = process.env.JWT_SECRET;
@@ -19,10 +20,15 @@ const validateToken = (req: Request, res: Response, next: NextFunction) => {
 
   jwt.verify(token, secret, (error, decodedToken: any) => {
     if (error) {
-        return res.status(403).json({message: 'Not authorized'})
+      console.error('Token verification error:', error.message);
+      return res.status(401).json({ message: 'Unauthorized - Invalid token', error: error.message });
     }
-    req.userId = decodedToken.userId
-    next()
+
+    if (!User.exists({ _id: decodedToken.userId })) {
+      return res.status(403).json({message: 'Not authorized'})
+    }
+    req.userId = decodedToken.userId;
+    next();
   });
 }
 
