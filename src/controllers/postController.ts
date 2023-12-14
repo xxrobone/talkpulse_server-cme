@@ -23,7 +23,7 @@ export const create = async (req: Request, res: Response) => {
 }
 
 export const getAllPosts = async (req: Request, res: Response) => {
-    const posts = await Post.find().populate("author", "userName");
+    const posts = await Post.find().populate("author", "username");
 
     res.status(200).json(posts)
 }

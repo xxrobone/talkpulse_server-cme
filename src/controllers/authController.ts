@@ -72,7 +72,8 @@ export const register = async (req: Request, res: Response) => {
 export const logIn = async (req: Request, res: Response) => {
   try {
     const { username, password } = req.body;
-    const user = await User.findOne({ username: username });
+    // +password gets the password, needed for login, default is set select false
+    const user = await User.findOne({ username: username}, '+password');
 
     // user and password could be checked at the same time, i separated them
     if (!user) {
