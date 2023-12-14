@@ -95,7 +95,7 @@ export const logIn = async (req: Request, res: Response) => {
     if (!refreshTokenSecret) {
       throw Error('Missing REFRESH_TOKEN_SECRET');
     }
-    // return refresh token
+   
     const refreshToken = jwt.sign({ userId: user._id }, refreshTokenSecret, {
       expiresIn: '23h',
     });

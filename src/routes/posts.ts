@@ -17,19 +17,20 @@ const router = express.Router();
 /* router.post('/', async (req: Request, res: Response) => {
   const newPostData: IPost = req.body;
   const newPost = new PostModel(newPostData);
-  try {
-    const { image } = req.body 
+  try { */
+/*     const { image } = req.body 
     const img_upload = await cloudinary.uploader.upload(image, { 
       folder: 'posts',
       width: 1200,
       crop: 'scale'
      }) as UploadApiResponse;
 
-    newPost.image = img_upload.secure_url;
+    newPost.image = img_upload.secure_url; */
 
-    const savedPost = await newPost.save();
+   /*  const savedPost = await newPost.save();
     res.status(200).json(savedPost);
   } catch (err) {
+    console.error('Error saving post:', err);
     res.status(500).json(err);
   }
 }); */

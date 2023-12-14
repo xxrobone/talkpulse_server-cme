@@ -1,16 +1,28 @@
 import { Document, Schema, model, Types } from 'mongoose';
 
+interface IComment {
+  text: string;
+  created: Date;
+  author: Types.ObjectId;
+}
 
 interface IPost extends Document {
   author: Types.ObjectId;
   title: string;
   link: string;
   content: string;
-  image: String;
-  upvotes: number;
-  downvotes: number;
-  comments: [];
+  image?: string;
+  public_id?: string;
+  upvotes?: number;
+  downvotes?: number;
+  comments?: IComment[];
 }
+
+const CommentSchema = new Schema<IComment>({
+  text: String,
+  created: { type: Date, default: Date.now },
+  author: { type: Schema.Types.ObjectId, ref: "User" },
+});
 
 const PostSchema = new Schema<IPost>(
   {
@@ -24,7 +36,9 @@ const PostSchema = new Schema<IPost>(
     },
     image: {
       type: String,
-      public_id: String,
+    },
+    public_id: {
+      type: String,
     },
     content: {
       type: String,
@@ -33,26 +47,15 @@ const PostSchema = new Schema<IPost>(
     author: {
       type: Schema.Types.ObjectId,
       ref: 'User',
-      required: true,
+      required: false,
     },
     upvotes: {
       type: Number,
-      required: true,
     },
     downvotes: {
       type: Number,
-      required: true,
     },
-    comments: [
-      {
-        text: String,
-        created: { type: Date, default: Date.now },
-        author: {
-          type: Schema.Types.ObjectId,
-          ref: "User",
-        }
-      }
-    ]
+    comments: [CommentSchema], // Using the CommentSchema for comments
   },
   { timestamps: true }
 );
