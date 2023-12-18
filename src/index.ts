@@ -5,6 +5,7 @@ import cors from 'cors'
 import authRoute from './routes/auth';
 import postsRoute from './routes/posts';
 import commentsRoute from './routes/comments'
+import userRoute from './routes/users'
 dotenv.config();
 
 const app: Express = express();
@@ -46,7 +47,8 @@ mongoose.connection.on('error', (err: Error) => console.log(err))
 // Routes
 app.use('/', authRoute);
 app.use('/', postsRoute);
-app.use('/', commentsRoute)
+app.use('/', commentsRoute);
+app.use('/', userRoute);
 
 // Server listening
 app.listen(PORT, (): void => {

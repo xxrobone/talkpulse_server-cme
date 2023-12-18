@@ -1,13 +1,16 @@
-import { Router, Request, Response } from 'express';
-import User, { IUser } from '../models/user.model';
-import bcrypt from 'bcrypt';
+import { Router } from 'express';
+import validateToken from '../middleware/middleware';
+import * as userController from '../controllers/userController';
 
 // will move this to auth!!!
 
 const router = Router();
 
+
+router.get('/user', validateToken, userController.getUser);
+
 // UPDATE
-router.put('/:id', async (req: Request, res: Response) => {
+/* router.put('/:id', async (req: Request, res: Response) => {
   if (req.body.userId === req.params.id) {
     if (req.body.password) {
       const salt = await bcrypt.genSalt(10);
@@ -22,7 +25,6 @@ router.put('/:id', async (req: Request, res: Response) => {
         { new: true }
       );
 
-      // Check if user was not found
       if (!updatedUser) {
         return res.status(404).json('User not found');
       }
@@ -35,10 +37,10 @@ router.put('/:id', async (req: Request, res: Response) => {
   } else {
     res.status(401).json('Not your account? Update failed!');
   }
-});
+}); */
 
 // DELETE
-router.delete('/:id', async (req: Request, res: Response) => {
+/* router.delete('/:id', async (req: Request, res: Response) => {
   if (req.body.userId === req.params.id) {
     try {
       await User.findByIdAndDelete(req.params.id);
@@ -49,10 +51,10 @@ router.delete('/:id', async (req: Request, res: Response) => {
   } else {
     res.status(401).json('You can only delete your own account, Delete failed!');
   }
-});
+}); */
 
 // GET USER BY ID
-router.get('/:id', async (req: Request, res: Response) => {
+/* router.get('/:id', async (req: Request, res: Response) => {
   try {
     const user = await User.findById(req.params.id);
     if (!user) {
@@ -66,4 +68,6 @@ router.get('/:id', async (req: Request, res: Response) => {
   }
 });
 
-export default router;
+*/
+
+export default router; 

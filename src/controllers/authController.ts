@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import User from "../models/user.model";
 import bcrypt from 'bcrypt';
 import jwt from "jsonwebtoken";
@@ -84,9 +84,8 @@ export const refreshJWT = async (req: Request, res: Response) => {
     } catch(error) {
         console.log(error)
         return res.status(403).json({message: 'Invalid token'})
-    }
-    
-}
+    }   
+}  
 
 
 // up next
