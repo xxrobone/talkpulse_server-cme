@@ -1,4 +1,4 @@
-import { Document, Schema, model } from 'mongoose';
+import { Document, Schema, model, MongooseError } from 'mongoose';
 import bcrypt from 'bcrypt';
 
 interface IUser extends Document {
@@ -30,14 +30,10 @@ const UserSchema = new Schema<IUser>(
       required: true,
       select: false,
     },
-    confirmed: {
-      type: Boolean,
-      default: false,
-      required: true,
-    },
     profileImage: {
       type: String,
       default: '',
+      required: false,
     },
     role: {
       type: String,
@@ -48,11 +44,16 @@ const UserSchema = new Schema<IUser>(
 );
 
 // adding the hassed password transformation here is more secure in production
-UserSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) next()
-  
-  const hashedPassword = await bcrypt.hash(this.password, 10)
-  this.password = hashedPassword
+UserSchema.pre('save', async function(next) {
+  if (!this.isModified('password')) return next();
+
+  try {
+      this.password = await bcrypt.hash(this.password, 10);
+      next();
+  } catch (error) {
+      if (error instanceof MongooseError) next(error);
+      else throw error;
+  }
 })
 
 const UserModel = model<IUser>('User', UserSchema);

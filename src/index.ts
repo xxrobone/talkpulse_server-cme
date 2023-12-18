@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 import cors from 'cors'
 import authRoute from './routes/auth';
 import userRoute from './routes/users';
-import postRoute from './routes/posts';
+import postsRoute from './routes/posts';
 dotenv.config();
 
 const app: Express = express();
@@ -45,7 +45,7 @@ mongoose.connection.on('error', (err: Error) => console.log(err))
 // Routes
 app.use('/', authRoute);
 app.use('/users', userRoute);
-app.use('/posts', postRoute);
+app.use('/posts', postsRoute);
 
 // Server listening
 app.listen(PORT, (): void => {

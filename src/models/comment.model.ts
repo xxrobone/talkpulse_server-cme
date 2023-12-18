@@ -1,10 +1,13 @@
-import { Document, Schema, model, Types } from 'mongoose';
+import { Document, Schema, Types, model } from 'mongoose';
 
 interface IComment extends Document {
   body: string;
-  user_id: Types.ObjectId;
-  post_id: Types.ObjectId;
+  createdAt: Date;
+  updatedAt: Date;
+  userId: Types.ObjectId;
+  postId: Types.ObjectId;
   parentComment_id?: Types.ObjectId;
+  author: Types.ObjectId; 
 }
 
 const CommentSchema = new Schema<IComment>(
@@ -13,12 +16,12 @@ const CommentSchema = new Schema<IComment>(
       type: String,
       required: true,
     },
-    user_id: {
+    userId: {
       type: Schema.Types.ObjectId,
       ref: 'User',
       required: true,
     },
-    post_id: {
+    postId: {
       type: Schema.Types.ObjectId,
       ref: 'Post',
       required: true,
@@ -27,12 +30,16 @@ const CommentSchema = new Schema<IComment>(
       type: Schema.Types.ObjectId,
       ref: 'Comment',
     },
+    author: {
+      type: Schema.Types.ObjectId,
+      ref: 'User', 
+      required: true,
+    },
   },
   { timestamps: true }
 );
 
-
-const CommentModel = model<IComment>('Post', CommentSchema);
+const CommentModel = model<IComment>('Comment', CommentSchema);
 
 export default CommentModel;
 export { IComment };

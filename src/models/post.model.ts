@@ -1,66 +1,49 @@
-import { Document, Schema, model, Types } from 'mongoose';
-
-interface IComment {
-  text: string;
-  created: Date;
-  author: Types.ObjectId;
-}
+import { Document, Schema, Types, Model, model } from 'mongoose';
+import CommentModel, { IComment } from './comment.model';
 
 interface IPost extends Document {
-  author: Types.ObjectId;
   title: string;
-  link: string;
-  content: string;
-  image?: string;
-  public_id?: string;
-  upvotes?: number;
-  downvotes?: number;
-  comments?: IComment[];
+  link?: string;
+  body?: string;
+  author: Types.ObjectId;
+  createdAt: Date;
+  updatedAt: Date;
+  comments: IComment[];
 }
 
-const CommentSchema = new Schema<IComment>({
-  text: String,
-  created: { type: Date, default: Date.now },
-  author: { type: Schema.Types.ObjectId, ref: "User" },
-});
+interface IPostProps {
+  comments: Types.DocumentArray<IComment>;
+}
 
-const PostSchema = new Schema<IPost>(
+type IPostModel = Model<IPost, {}, IPostProps>;
+
+const PostSchema = new Schema<IPost, IPostModel>(
   {
     title: {
       type: String,
       required: true,
+      trim: true,
     },
     link: {
       type: String,
-      required: true,
+      trim: true,
     },
-    image: {
+    body: {
       type: String,
-    },
-    public_id: {
-      type: String,
-    },
-    content: {
-      type: String,
-      required: true,
     },
     author: {
       type: Schema.Types.ObjectId,
       ref: 'User',
-      required: false,
+      required: true,
     },
-    upvotes: {
-      type: Number,
-    },
-    downvotes: {
-      type: Number,
-    },
-    comments: [CommentSchema], // Using the CommentSchema for comments
+    comments: [CommentModel.schema], 
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
 
-const PostModel = model<IPost>('Post', PostSchema);
+const Post = model<IPost, IPostModel>('Post', PostSchema);
 
-export default PostModel;
-export { IPost };
+export default Post;
+

@@ -51,10 +51,12 @@ const router = Router();
   }
 }); */
 
-router.post('/signup', authController.register)
+router.post('/signup', authController.signUp)
 
 router.post('/login', authController.logIn)
 
-router.post('/profile', validateToken, authController.profile)
+router.post('/token/refresh', authController.refreshJWT)
+
+router.post('/profile', validateToken, authController.updateProfile)
 
 export default router;
