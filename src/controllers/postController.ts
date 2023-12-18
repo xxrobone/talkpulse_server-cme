@@ -47,12 +47,12 @@ export const getAllPosts = async (req: Request, res: Response) => {
 }
 
 export const getPost = async (req: Request, res: Response) => {
-    const { id } = req.params;
+    const { postId } = req.params;
 
-    const post = await Post.findById(id).populate("author").populate("comments.author");
+    const post = await Post.findById(postId).populate("author").populate("comments.author");
 
     if (!post) {
-        return res.status(404).json({message: 'No post found for id: ' + id})
+        return res.status(404).json({message: 'No post found for id: ' + postId})
     }
 
     res.status(200).json(post)
@@ -63,7 +63,7 @@ export const updatePost = async (req: Request, res: Response) => {
     assertDefined(req.userId);
     try {
         assertDefined(req.userId);
-        const post = await Post.findById(req.params.id);
+        const post = await Post.findById(req.params.postId);
 
         if (post?.author.toString() === req.userId) {
             const updatedFields: { [key: string]: string } = {};
@@ -74,7 +74,7 @@ export const updatePost = async (req: Request, res: Response) => {
             if (req.body.body) updatedFields.body = req.body.body;
 
             const updatedPost = await Post.findByIdAndUpdate(
-                req.params.id,
+                req.params.postId,
                 { $set: updatedFields },
                 { new: true }
             );
@@ -95,10 +95,10 @@ export const updatePost = async (req: Request, res: Response) => {
 export const deletePost = async (req: Request, res: Response) => {
     try {
         assertDefined(req.userId);
-        const post = await Post.findById(req.params.id);
+        const post = await Post.findById(req.params.postId);
 
         if (post?.author.toString() === req.userId) {
-            await Post.deleteOne({ _id: req.params.id });
+            await Post.deleteOne({ _id: req.params.postId });
             res.status(200).json('Post deleted');
         } else {
             res.status(401).json('You are not allowed to delete this Post');

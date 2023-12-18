@@ -6,11 +6,11 @@ const router = Router();
 
   
 
-router.post('/', validateToken, postController.create);
-router.get('/', postController.getAllPosts);
-router.get('/:id', postController.getPost);
-router.put('/:id', validateToken, postController.updatePost);
-router.delete('/:id', validateToken, postController.deletePost);
+router.post('/posts', validateToken, postController.create);
+router.get('/posts', postController.getAllPosts);
+router.get('/posts/:postId', postController.getPost);
+router.put('/posts/:postId', validateToken, postController.updatePost);
+router.delete('/posts/:postId', validateToken, postController.deletePost);
 
 export = router;
 

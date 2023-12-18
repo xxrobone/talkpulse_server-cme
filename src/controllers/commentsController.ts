@@ -9,9 +9,9 @@ export const createComment = async (req: Request, res: Response) => {
     const userId = req.userId;
 
     assertDefined(userId);
+    assertDefined(postId);
 
     console.log('userId:', userId);
-    console.log('postId:', postId);
 
     const { commentBody } = req.body;
 

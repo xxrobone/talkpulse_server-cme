@@ -45,8 +45,8 @@ mongoose.connection.on('error', (err: Error) => console.log(err))
 
 // Routes
 app.use('/', authRoute);
-app.use('/posts', postsRoute);
-app.use('/posts/:postId/comments', commentsRoute)
+app.use('/', postsRoute);
+app.use('/', commentsRoute)
 
 // Server listening
 app.listen(PORT, (): void => {

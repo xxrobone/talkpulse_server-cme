@@ -4,7 +4,7 @@ import * as commentController from '../controllers/commentsController'
 
 const router = Router();
 
-router.post('/', validateToken, commentController.createComment)
-router.delete('/:commentId', validateToken, commentController.deleteComment)
+router.post('/posts/:postId/comments', validateToken, commentController.createComment)
+router.delete('/posts/:postId/comments/:commentId', validateToken, commentController.deleteComment)
 
 export default router;
