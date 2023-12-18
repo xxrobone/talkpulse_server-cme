@@ -23,7 +23,7 @@ export const create = async (req: Request, res: Response) => {
 }
 
 export const getAllPosts = async (req: Request, res: Response) => {
-    const limit = parseInt(req.query.limit?.toString() || '10');
+    const limit = parseInt(req.query.limit?.toString() || '5');
     const page = parseInt(req.query.page?.toString() || '1')
 
     if (isNaN(page) || isNaN(limit)) {
