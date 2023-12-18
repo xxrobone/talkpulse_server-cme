@@ -1,65 +1,16 @@
-import express, { Request, Response } from 'express';
-import PostModel from '../models/post.model';
+import { Router } from 'express';
+import validateToken from '../middleware/middleware';
 import * as postController from '../controllers/postController'
-const router = express.Router();
 
-// Update Post
-router.put('/:id', async (req: Request, res: Response) => {
-  try {
-    const post = await PostModel.findById(req.params.id);
-    if (post?.author.toString() === req.body.author) {
-      try {
-        const updatedPost = await PostModel.findByIdAndUpdate(
-          req.params.id,
-          {
-            $set: req.body,
-          },
-          { new: true }
-        );
-        res.status(200).json(updatedPost);
-      } catch (err) {
-        res.status(500).json(err);
-      }
-    } else {
-      res.status(401).json('You are not allowed to update this Post');
-    }
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
+const router = Router();
 
-// Delete post
-router.delete('/:postId/:userId', async (req: Request, res: Response) => {
-    try {
-      const postId = req.params.postId;
-      const userIdFromRequest = req.params.userId;
-  
-      const post = await PostModel.findById(postId);
-  
-      if (post) {
-        if (post.author.toString() === userIdFromRequest) {
-          try {
-            await PostModel.deleteOne({ _id: postId });
-            res.status(200).json('Post deleted');
-          } catch (err) {
-            res.status(500).json(err);
-          }
-        } else {
-          res.status(401).json('You dont have permission to delete this Post');
-        }
-      } else {
-        res.status(404).json('Post not found');
-      }
-    } catch (err) {
-      res.status(500).json(err);
-    }
-  });
   
 
-
-router.get('/', postController.getAllPosts)
-router.post('/', postController.create)
-router.get('/:id', postController.getPost)
+router.post('/', validateToken, postController.create);
+router.get('/', postController.getAllPosts);
+router.get('/:id', postController.getPost);
+router.put('/:id', validateToken, postController.updatePost);
+router.delete('/:id', validateToken, postController.deletePost);
 
 export = router;
 
@@ -125,4 +76,61 @@ export = router;
   } catch (err) {
     res.status(500).json(err);
   }
-}); */
+}); 
+
+
+
+// Update Post
+router.put('/:id', async (req: Request, res: Response) => {
+  try {
+    const post = await PostModel.findById(req.params.id);
+    if (post?.author.toString() === req.body.author) {
+      try {
+        const updatedPost = await PostModel.findByIdAndUpdate(
+          req.params.id,
+          {
+            $set: req.body,
+          },
+          { new: true }
+        );
+        res.status(200).json(updatedPost);
+      } catch (err) {
+        res.status(500).json(err);
+      }
+    } else {
+      res.status(401).json('You are not allowed to update this Post');
+    }
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// Delete post
+router.delete('/:postId/:userId', async (req: Request, res: Response) => {
+    try {
+      const postId = req.params.postId;
+      const userIdFromRequest = req.params.userId;
+  
+      const post = await PostModel.findById(postId);
+  
+      if (post) {
+        if (post.author.toString() === userIdFromRequest) {
+          try {
+            await PostModel.deleteOne({ _id: postId });
+            res.status(200).json('Post deleted');
+          } catch (err) {
+            res.status(500).json(err);
+          }
+        } else {
+          res.status(401).json('You dont have permission to delete this Post');
+        }
+      } else {
+        res.status(404).json('Post not found');
+      }
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  });
+
+
+*/

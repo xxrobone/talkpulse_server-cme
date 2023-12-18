@@ -1,13 +1,10 @@
-/* 
-pre structure
+import { Router } from 'express';
+import validateToken from '../middleware/middleware';
+import * as commentController from '../controllers/commentsController'
 
-top-level comments
+const router = Router();
 
-const topLevelComments = await CommentModel.find({ post_id: yourPostId, parentComment_id: null }).populate('user_id');
+router.post('/', validateToken, commentController.createComment)
+router.delete('/:commentId', validateToken, commentController.deleteComment)
 
-replies for a specific comment
-
-const commentId = yourCommentId; // the parent comment's ID
-const replies = await CommentModel.find({ post_id: yourPostId, parentComment_id: commentId }).populate('user_id');
-
-*/
+export default router;

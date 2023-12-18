@@ -1,3 +1,6 @@
+// for later use, not using it yet, working on it in dev branch
+// just keeping it here too... 
+
 const nodemailer = require('nodemailer')
 
 let transporter = nodemailer.createTransport({

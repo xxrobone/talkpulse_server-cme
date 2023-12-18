@@ -3,8 +3,8 @@ import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import cors from 'cors'
 import authRoute from './routes/auth';
-import userRoute from './routes/users';
 import postsRoute from './routes/posts';
+import commentsRoute from './routes/comments'
 dotenv.config();
 
 const app: Express = express();
@@ -35,6 +35,7 @@ app.get("/", (req: Request, res: Response): void => {
   res.send("Hello Typescript with Node.js! Connected");
 });
 
+// moved this to routes, just and example, will remove
 /* app.post('/profile', validateToken, authController.profile) */
 
 mongoose.Promise = Promise
@@ -44,8 +45,8 @@ mongoose.connection.on('error', (err: Error) => console.log(err))
 
 // Routes
 app.use('/', authRoute);
-app.use('/users', userRoute);
 app.use('/posts', postsRoute);
+app.use('/posts/:postId/comments', commentsRoute)
 
 // Server listening
 app.listen(PORT, (): void => {

@@ -26,18 +26,26 @@ Structure (to follow, might change it)
 ├── src
 │   ├── controllers
 │   │   ├── authController.ts
-│   │   └── userController.ts
+│   │   |── postController.ts
+|   |   |── commentController.ts
 │   ├── middleware
 │   │   └── authMiddleware.ts
 │   ├── models
-│   │   └── User.ts
+|   |   ├── user.model.ts
+│   │   |── post.model.ts
+|   |   |── comment.model.ts
 │   ├── routes
-│   │   └── authRoutes.ts
+|   |   ├── authRoutes.ts
+│   │   |── postRoutests
+|   |   |── commentRoutes.ts
 │   ├── config
 │   │   └── config.ts
+│   ├── helpers
+│   │   └── helpers.ts
+│   ├── types
+│   │   └── types.ts
 │   ├── utils
-│   │   <!-- └── bcrypt as util? .ts -->
-│   (├── server.ts)
+│   │   └── bcrypt as utils.ts (all utils functions)
 │   └── index.ts
 ├── .env
 ├── package.json

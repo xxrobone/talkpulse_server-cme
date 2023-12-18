@@ -2,6 +2,8 @@ import { Router, Request, Response } from 'express';
 import User, { IUser } from '../models/user.model';
 import bcrypt from 'bcrypt';
 
+// will move this to auth!!!
+
 const router = Router();
 
 // UPDATE
