@@ -88,6 +88,8 @@ export const refreshJWT = async (req: Request, res: Response) => {
     
 }
 
+
+// up next
 export const updateProfile = async (req: Request, res: Response) => {
     const { userId } = req
 
