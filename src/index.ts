@@ -6,6 +6,7 @@ import authRoute from './routes/auth';
 import postsRoute from './routes/posts';
 import commentsRoute from './routes/comments'
 import userRoute from './routes/users'
+import votesRoute from './routes/votes'
 dotenv.config();
 
 const app: Express = express();
@@ -49,6 +50,7 @@ app.use('/', authRoute);
 app.use('/', postsRoute);
 app.use('/', commentsRoute);
 app.use('/', userRoute);
+app.use('/', votesRoute);
 
 // Server listening
 app.listen(PORT, (): void => {
