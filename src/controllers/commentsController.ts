@@ -54,6 +54,45 @@ export const createComment = async (req: Request, res: Response) => {
     }
 };
 
+export const updateComment = async (req: Request, res: Response) => {
+    const { postId, commentId } = req.params;
+    const { userId } = req;
+    assertDefined(userId)
+
+    try {
+        const post = await Post.findById(postId)
+
+        if (!post) {
+            return res.status(404).json({message: 'No post found with the ID: ' + postId})
+        }
+
+        const comment = post.comments.id(commentId)
+
+        if (!comment) {
+            return res.status(404).json({message: 'No post comment found with the ID: ' + commentId})
+        }
+
+        const commentAny = comment as any;
+
+        if (commentAny.author.toString() !== userId) {
+            return res.status(403).json({ message: 'Not authorized' });
+        }
+        const updatedFields: { [key: string]: string } = {};
+
+        // the update part - if changes are made update comment
+        if (req.body.commentBody) updatedFields.body = req.body.commentBody;
+    
+        Object.assign(commentAny, updatedFields);
+    
+        const updatedPost = await post.save();
+    
+        return res.status(200).json(updatedPost);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: 'Failed to update comment' });
+      }
+}
+
 
 export const deleteComment = async (req: Request, res: Response) => {
     const { postId, commentId } = req.params;
