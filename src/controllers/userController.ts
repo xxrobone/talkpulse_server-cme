@@ -19,3 +19,4 @@ export const getUser = async (req: Request, res: Response) => {
         res.status(500).json({ message: 'Failed to get user' });
     }
 };
+
