@@ -79,7 +79,7 @@ export const updateComment = async (req: Request, res: Response) => {
         }
         const updatedFields: { [key: string]: string } = {};
 
-        // the update part - if changes are made update comment
+        // Update part - if changes are made, update comment
         if (req.body.commentBody) updatedFields.body = req.body.commentBody;
     
         Object.assign(commentAny, updatedFields);
@@ -90,7 +90,7 @@ export const updateComment = async (req: Request, res: Response) => {
     } catch (error) {
         console.log(error);
         return res.status(500).json({ message: 'Failed to update comment' });
-      }
+    }
 }
 
 
