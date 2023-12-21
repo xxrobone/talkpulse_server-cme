@@ -9,8 +9,8 @@ const router = Router();
 router.post('/posts', validateToken, postController.create);
 router.get('/posts', postController.getAllPosts);
 router.get('/posts/:postId', postController.getPost);
-router.put('/posts/:postId', validateToken, postController.updatePost);
-router.delete('/posts/:postId', validateToken, postController.deletePost);
+router.put('/posts/:postId/update', validateToken, postController.updatePost);
+router.delete('/posts/:postId/delete', validateToken, postController.deletePost);
 
 export = router;
 
