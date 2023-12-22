@@ -35,8 +35,7 @@ app.use('/', commentsRoute);
 app.use('/', userRoute);
 app.use('/', votesRoute);
 
-const mongoURL = process.env.DB_URL;
-/* const mongoURL = process.env.MONGO_DOCKER_URI; */
+const mongoURL = process.env.DB_URL; 
 if (!mongoURL) throw Error('Missing db url');
 mongoose.connect(mongoURL)
     .then(() => {
