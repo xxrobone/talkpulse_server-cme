@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import validateToken from '../middleware/middleware';
+import validateToken from '../middleware/authMiddleware';
 import * as userController from '../controllers/userController';
 
 // will move this to auth!!!

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import validateToken from '../middleware/middleware';
+import validateToken from '../middleware/authMiddleware';
 import * as postController from '../controllers/postController'
 
 const router = Router();
