@@ -10,6 +10,8 @@ router.post('/login', authController.logIn)
 
 router.post('/token/refresh', authController.refreshJWT)
 
+router.post('/verifyAccount', authController.verifyAccount)
+
 router.post('/profile', validateToken, authController.updateProfile)
 
 export default router;

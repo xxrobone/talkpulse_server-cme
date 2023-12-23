@@ -30,6 +30,11 @@ const UserSchema = new Schema<IUser>(
       required: true,
       select: false,
     },
+    confirmed: {
+      type: Boolean,
+      default: false,
+      required: true,
+    },
     profileImage: {
       type: String,
       default: '',

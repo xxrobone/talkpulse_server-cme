@@ -3,7 +3,7 @@ import User from "../models/user.model";
 import bcrypt from 'bcrypt';
 import jwt from "jsonwebtoken";
 import { assertDefined } from "../utils/asserts";
-import verifyEmail from "helpers/Email";
+import {verifyEmail} from "../services/EmailVerification";
 
 export const signUp = async (req: Request, res: Response) => {
     const { username, password, email } = req.body;
@@ -18,6 +18,14 @@ export const signUp = async (req: Request, res: Response) => {
         }
 
         const user = new User({ username: username, password, email })
+
+        assertDefined(process.env.EMAIL_TOKEN)
+
+        const emailToken = jwt.sign({
+            username: username
+        }, process.env.EMAIL_TOKEN, { expiresIn: '1h' })
+        
+        verifyEmail(username, email, emailToken)
         await user.save()
 
         res.status(201).json({ username, id: user._id });
@@ -27,6 +35,35 @@ export const signUp = async (req: Request, res: Response) => {
     }
 }
 
+
+export const verifyAccount = async (req: Request, res: Response) => {
+    const { username } = req.body
+    const { token } = req.body
+    const secret = process.env.EMAIL_TOKEN
+
+    assertDefined(secret)
+    const userFound = await User.findOne({ username: username })
+
+    if (!userFound) {
+        return res.json({ message: 'No userfound in db' })
+    } else {
+        try {
+            const decode = jwt.verify(token, secret)
+            console.log(decode)
+            const u = User.updateOne({ username: username }, {
+                $set: {
+                    confirmed: true,
+                }
+            })
+            return res.json(({ message: 'User successfully verified' }))
+
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ message: "Internal Server Error" });
+        }
+        
+    }
+}
 export const logIn = async (req: Request, res: Response) => {
     console.log(req.userId);
     try {
@@ -39,6 +76,10 @@ export const logIn = async (req: Request, res: Response) => {
         // Kolla att vi har en användare och om lösenordet matchar det i databasen.
         if (!user || !await bcrypt.compare(password, user.password)) {
             return res.status(400).json({ message: 'Wrong username or password' });
+        }
+
+        if (user.confirmed === false) {
+            return res.status(400).json({ message: 'Account not confirmed' });
         }
         
         assertDefined(process.env.JWT_SECRET)
