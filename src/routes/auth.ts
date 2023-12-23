@@ -10,7 +10,7 @@ router.post('/login', authController.logIn)
 
 router.post('/token/refresh', authController.refreshJWT)
 
-router.post('/verifyAccount', authController.verifyAccount)
+router.post('/verifyAccount/:username/:token', authController.verifyAccount)
 
 router.post('/profile', validateToken, authController.updateProfile)
 

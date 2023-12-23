@@ -21,9 +21,11 @@ export const signUp = async (req: Request, res: Response) => {
 
         assertDefined(process.env.EMAIL_TOKEN)
 
-        const emailToken = jwt.sign({
-            username: username
-        }, process.env.EMAIL_TOKEN, { expiresIn: '1h' })
+        const emailToken = jwt.sign(
+            { username: username },
+            process.env.EMAIL_TOKEN,
+            { expiresIn: '1h' }
+        );
         
         verifyEmail(username, email, emailToken)
         await user.save()
@@ -37,33 +39,33 @@ export const signUp = async (req: Request, res: Response) => {
 
 
 export const verifyAccount = async (req: Request, res: Response) => {
-    const { username } = req.body
-    const { token } = req.body
-    const secret = process.env.EMAIL_TOKEN
+    const { username, token } = req.params;
 
-    assertDefined(secret)
-    const userFound = await User.findOne({ username: username })
+    try {
+        // Check if the user exists
+        const userFound = await User.findOne({ username });
 
-    if (!userFound) {
-        return res.json({ message: 'No userfound in db' })
-    } else {
-        try {
-            const decode = jwt.verify(token, secret)
-            console.log(decode)
-            const u = User.updateOne({ username: username }, {
-                $set: {
-                    confirmed: true,
-                }
-            })
-            return res.json(({ message: 'User successfully verified' }))
-
-        } catch (error) {
-            console.log(error);
-            res.status(500).json({ message: "Internal Server Error" });
+        if (!userFound) {
+            return res.status(404).json({ message: 'User not found in the database' });
         }
-        
+
+        // Verify the token
+        const secret = process.env.EMAIL_TOKEN;
+        assertDefined(secret);
+
+        const decodedToken = jwt.verify(token, secret);
+        console.log('Decoded token:', decodedToken);
+
+        // Update user confirmation status
+        await User.updateOne({ username }, { $set: { confirmed: true } });
+
+        return res.json({ message: 'User successfully verified' });
+    } catch (error) {
+        console.error('Error during verification:', error);
+        return res.status(500).json({ message: 'Internal Server Error' });
     }
-}
+};
+
 export const logIn = async (req: Request, res: Response) => {
     console.log(req.userId);
     try {
