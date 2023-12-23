@@ -52,3 +52,6 @@ Structure (to follow, might change it)
 ├── package.json
 └── tsconfig.json
 ```
+
+
+NEXT UP NODEMAILER!!!
