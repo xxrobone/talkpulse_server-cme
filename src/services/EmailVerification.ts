@@ -22,7 +22,7 @@ export const verifyEmail = async (username: string, email: string, token: string
             from: process.env.EMAIL_USER,
             to: email,
             subject: `Hello ${username} please verify your email to gain access to Tchat and activate your account by clicking the link`,
-            html: `http://localhost:3000/verify-account/${encodedUsername}/${encodedToken}`,
+            html: `${process.env.BASE_URL}/verify-account/${encodedUsername}/${encodedToken}`,
         }, (error: any, result: any) => {
             if (error) {
                 console.error("Error sending email: ", error);
