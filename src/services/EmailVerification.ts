@@ -19,7 +19,7 @@ export const verifyEmail = async (username: string, email: string, token: string
         const encodedToken = encodeURIComponent(token);
 
         let info = await transporter.sendMail({
-            from: 'hiphopsthlm@gmail.com',
+            from: process.env.EMAIL_USER,
             to: email,
             subject: `Hello ${username} please verify your email to gain access to Tchat and activate your account by clicking the link`,
             html: `http://localhost:3000/verify-account/${encodedUsername}/${encodedToken}`,
