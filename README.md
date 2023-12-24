@@ -55,3 +55,24 @@ Structure (to follow, might change it)
 
 
 NEXT UP NODEMAILER!!!
+
+TODO:
+Verification [x] - working on live site
+
+SUBREDDITS!
+ADD model:              []
+ADD controllers:        []
+ADD routing:            []
+
+REDIRECTS
+Add redirects to:
+comments:   []
+posts:      []
+delete:     []
+
+REPLIES!
+ADD model:              []
+ADD controllers:        []
+ADD routing:            []
+
+ADDIONAL STYLING
