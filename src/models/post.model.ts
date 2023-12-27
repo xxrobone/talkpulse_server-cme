@@ -1,6 +1,6 @@
 import { Document, Schema, Types, Model, model } from 'mongoose';
 import CommentModel, { IComment } from './comment.model';
-import { IVote } from './vote.model';
+import VoteModel, {IVote} from './vote.model';
 
 interface IPost extends Document {
   title: string;
@@ -9,9 +9,9 @@ interface IPost extends Document {
   author: Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
-  comments: IComment[];
-  upvotes: Types.Array<Types.ObjectId>;
-  downvotes: Types.Array<Types.ObjectId>;
+  comments: Types.DocumentArray<IComment>;
+  upvotes: Types.Array<IVote['_id']>;
+  downvotes: Types.Array<IVote['_id']>;
   score: number;
 }
 
@@ -42,18 +42,18 @@ const PostSchema = new Schema<IPost, IPostModel>(
       ref: 'User',
       required: true,
     },
-    comments: [CommentModel.schema], 
+    comments: [CommentModel.schema],
     upvotes: [{
       type: Schema.Types.ObjectId,
-      ref: 'User',
+      ref: 'Vote',
     }],
     downvotes: [{
       type: Schema.Types.ObjectId,
-      ref: 'User',
-  }],
-  score: {
-    type: Number,
-    default: 0
+      ref: 'Vote',
+    }],
+    score: {
+      type: Number,
+      default: 0,
     },
   },
   {
@@ -61,43 +61,62 @@ const PostSchema = new Schema<IPost, IPostModel>(
   }
 );
 
-// NEW
+// Updated upvote method
 PostSchema.method('upvote', async function (this: IPost, userId: string) {
-  const userIdObject = new Types.ObjectId(userId)
-  if (this.upvotes.includes(userIdObject)) {
-    // could throw and error message here 
-    return
-  } else if (this.downvotes.includes(userIdObject)) {
-    this.downvotes.pull(userId)
+  const userIdObject = new Types.ObjectId(userId);
+  const existingUpvote = this.upvotes.find(voteId => voteId.equals(userIdObject));
+  
+  if (existingUpvote) {
+    // User has already upvoted, do nothing or handle accordingly
+    return;
+  } else {
+    const newUpvote = new VoteModel({
+      userId: userIdObject,
+      targetId: this._id,
+      targetType: 'post',
+      voteType: 'upvote',
+    });
+
+    this.upvotes.push(newUpvote._id);
+
+    await Promise.all([newUpvote.save(), this.save()]);
   }
+});
 
-  this.upvotes.push(userIdObject)
-})
-
-// =========================================================================================================
-// NEW
+// Updated downvote method
 PostSchema.method('downvote', async function (this: IPost, userId: string) {
-  const userIdObject = new Types.ObjectId(userId)
-  if (this.downvotes.includes(userIdObject)) {
-    // could throw and error message here 
-    return
-  } else if (this.upvotes.includes(userIdObject)) {
-    this.upvotes.pull(userIdObject)
+  const userIdObject = new Types.ObjectId(userId);
+  const existingDownvote = this.downvotes.find(voteId => voteId.equals(userIdObject));
+  
+  if (existingDownvote) {
+    // User has already downvoted, do nothing or handle accordingly
+    return;
+  } else {
+    const newDownvote = new VoteModel({
+      userId: userIdObject,
+      targetId: this._id,
+      targetType: 'post',
+      voteType: 'downvote',
+    });
+
+    this.downvotes.push(newDownvote._id);
+
+    await Promise.all([newDownvote.save(), this.save()]);
   }
+});
 
-  this.downvotes.push(userIdObject)
-})
-
-// NEW
-// just like middleware checking if there is new upvotes or downvote and counts out the new score
-PostSchema.pre<IPost>('save', function(next) {
+// Updated pre-save hook
+PostSchema.pre<IPost>('save', async function (next) {
   if (this.isModified('upvotes') || this.isModified('downvotes')) {
-    this.score = this.upvotes?.length - this.downvotes?.length
+    const upvotesCount = await VoteModel.countDocuments({ targetId: this._id, targetType: 'post', voteType: 'upvote' });
+    const downvotesCount = await VoteModel.countDocuments({ targetId: this._id, targetType: 'post', voteType: 'downvote' });
+    this.score = upvotesCount - downvotesCount;
   }
-  next()
-})
+  next();
+});
 
 const Post = model<IPost, IPostModel>('Post', PostSchema);
 
-export default Post;
+export { IPost };
 
+export default Post;
