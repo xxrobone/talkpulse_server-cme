@@ -69,7 +69,7 @@ export const updatePost = async (req: Request, res: Response) => {
     if (post?.author.toString() === req.userId) {
       const updatedFields: { [key: string]: string } = {};
 
-      // Only update if given in the request body
+      // conditional to check if there is an updated version of the title, link or body
       if (req.body.title) updatedFields.title = req.body.title;
       if (req.body.link) updatedFields.link = req.body.link;
       if (req.body.body) updatedFields.body = req.body.body;
@@ -89,34 +89,6 @@ export const updatePost = async (req: Request, res: Response) => {
     res.status(500).json({ message: 'Failed to update post' });
   }
 };
-/* export const updatePost = async (req: Request, res: Response) => {
-    assertDefined(req.userId);
-    try {
-        assertDefined(req.userId);
-        const post = await Post.findById(req.params.postId);
-
-        if (post?.author.toString() === req.userId) {
-            const updatedFields: { [key: string]: string } = {};
-
-            if (req.body.title) updatedFields.title = req.body.title;
-            if (req.body.link) updatedFields.link = req.body.link;
-            if (req.body.body) updatedFields.body = req.body.body;
-
-            const updatedPost = await Post.findByIdAndUpdate(
-                req.params.postId,
-                { $set: updatedFields },
-                { new: true }
-            );
-
-            res.status(200).json(updatedPost);
-        } else {
-            res.status(401).json('You are not allowed to update this Post');
-        }
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: 'Failed to update post' });
-    }
-}; */
 
 // DELETE ONE BY ID
 export const deletePost = async (req: Request, res: Response) => {
@@ -135,19 +107,4 @@ export const deletePost = async (req: Request, res: Response) => {
     res.status(500).json({ message: 'Failed to delete post' });
   }
 };
-/* export const deletePost = async (req: Request, res: Response) => {
-    try {
-        assertDefined(req.userId);
-        const post = await Post.findById(req.params.postId);
 
-        if (post?.author.toString() === req.userId) {
-            await Post.deleteOne({ _id: req.params.postId });
-            res.status(200).json('Post deleted');
-        } else {
-            res.status(401).json('You are not allowed to delete this Post');
-        }
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: 'Failed to delete post' });
-    }
-}; */
