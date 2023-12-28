@@ -1,5 +1,6 @@
-import { Document, Schema, Types, model } from 'mongoose';
-import VoteModel, { IVote } from './vote.model';
+// comment.model.ts
+
+import { Document, Schema, Types, model, Model } from 'mongoose';
 
 interface IComment extends Document {
   body: string;
@@ -9,13 +10,22 @@ interface IComment extends Document {
   postId: Types.ObjectId;
   parentComment_id?: Types.ObjectId;
   author: Types.ObjectId;
-  upvotes: Types.Array<IVote['_id']>;
-  downvotes: Types.Array<IVote['_id']>;
-  upvote: (userId: string) => Promise<void>;
-  downvote: (userId: string) => Promise<void>;
+  upvotes: Types.Array<Types.ObjectId>;
+  downvotes: Types.Array<Types.ObjectId>;
+  score: number;
+  upvote: (userId: string) => void;
+  downvote: (userId: string) => void;
 }
 
-const CommentSchema = new Schema<IComment>(
+interface ICommentProps {
+  comments: Types.DocumentArray<IComment>;
+  upvote: (userId: string) => void;
+  downvote: (userId: string) => void;
+}
+
+type ICommentModel = Model<IComment, {}, ICommentProps>;
+
+const CommentSchema = new Schema<IComment, ICommentModel>(
   {
     body: {
       type: String,
@@ -42,61 +52,47 @@ const CommentSchema = new Schema<IComment>(
     },
     upvotes: [{
       type: Schema.Types.ObjectId,
-      ref: 'Vote',
+      ref: 'User',
     }],
     downvotes: [{
       type: Schema.Types.ObjectId,
-      ref: 'Vote',
+      ref: 'User',
     }],
+    score: {
+      type: Number,
+      default: 0,
+    },
   },
   { timestamps: true }
 );
 
-// Updated upvote method
-CommentSchema.method('upvote', async function (this: IComment, userId: string): Promise<void> {
+// UPVOTE
+CommentSchema.method('upvote', async function (this: IComment, userId: string) {
   const userIdObject = new Types.ObjectId(userId);
-  const existingUpvote = this.upvotes.find(voteId => voteId.equals(userIdObject));
-
-  if (existingUpvote) {
-    // User has already upvoted, do nothing or handle accordingly
-    return;
-  } else {
-    const newUpvote = new VoteModel({
-      userId: userIdObject,
-      targetId: this._id,
-      targetType: 'comment',
-      voteType: 'upvote',
-    });
-
-    this.upvotes.push(newUpvote._id);
-
-    await Promise.all([newUpvote.save(), this.save()]);
+  if (this.upvotes.includes(userIdObject)) {
+    return; // Already upvoted
+  } else if (this.downvotes.includes(userIdObject)) {
+    this.downvotes.pull(userIdObject);
   }
+
+  this.upvotes.push(userIdObject);
+  this.score = this.upvotes.length - this.downvotes.length;
 });
 
-// Updated downvote method
-CommentSchema.method('downvote', async function (this: IComment, userId: string): Promise<void> {
+// DOWNVOTE
+CommentSchema.method('downvote', async function (this: IComment, userId: string) {
   const userIdObject = new Types.ObjectId(userId);
-  const hasDownvoted = this.downvotes.some(voteId => voteId.equals(userIdObject));
-
-  if (hasDownvoted) {
-    // User has already downvoted, do nothing or handle accordingly
-    return;
-  } else {
-    const newDownvote = new VoteModel({
-      userId: userIdObject,
-      targetId: this._id,
-      targetType: 'comment',
-      voteType: 'downvote',
-    });
-
-    this.downvotes.push(newDownvote._id);
-
-    await Promise.all([newDownvote.save(), this.save()]);
+  if (this.downvotes.includes(userIdObject)) {
+    return; // Already downvoted
+  } else if (this.upvotes.includes(userIdObject)) {
+    this.upvotes.pull(userIdObject);
   }
+
+  this.downvotes.push(userIdObject);
+  this.score = this.upvotes.length - this.downvotes.length;
 });
 
-const CommentModel = model<IComment>('Comment', CommentSchema);
+const Comment = model<IComment, ICommentModel>('Comment', CommentSchema);
 
-export default CommentModel;
+export default Comment;
 export { IComment };
