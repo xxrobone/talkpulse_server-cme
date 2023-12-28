@@ -58,6 +58,11 @@ NEXT UP NODEMAILER!!!
 
 TODO:
 Verification [x] - working on live site
+Voting both comments and post works on local [x] (not on live site)
+
+USER!
+Password verification [x]
+Password reset [x]
 
 SUBREDDITS!
 ADD model:              []
