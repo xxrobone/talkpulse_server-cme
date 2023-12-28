@@ -1,6 +1,5 @@
 import { Document, Schema, Types, Model, model } from 'mongoose';
 import CommentModel, { IComment } from './comment.model';
-import { IVote } from './vote.model';
 
 interface IPost extends Document {
   title: string;
@@ -62,6 +61,7 @@ const PostSchema = new Schema<IPost, IPostModel>(
 );
 
 // NEW
+// UPVOTE
 PostSchema.method('upvote', async function (this: IPost, userId: string) {
   const userIdObject = new Types.ObjectId(userId)
   if (this.upvotes.includes(userIdObject)) {
@@ -74,8 +74,9 @@ PostSchema.method('upvote', async function (this: IPost, userId: string) {
   this.upvotes.push(userIdObject)
 })
 
-// =========================================================================================================
+
 // NEW
+// DOWNVOTE
 PostSchema.method('downvote', async function (this: IPost, userId: string) {
   const userIdObject = new Types.ObjectId(userId)
   if (this.downvotes.includes(userIdObject)) {
@@ -89,7 +90,7 @@ PostSchema.method('downvote', async function (this: IPost, userId: string) {
 })
 
 // NEW
-// just like middleware checking if there is new upvotes or downvote and counts out the new score
+// Checks if score is modified and counts out a new score
 PostSchema.pre<IPost>('save', function(next) {
   if (this.isModified('upvotes') || this.isModified('downvotes')) {
     this.score = this.upvotes?.length - this.downvotes?.length
