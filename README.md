@@ -58,7 +58,8 @@ NEXT UP NODEMAILER!!!
 
 TODO:
 Verification [x] - working on live site
-Voting both comments and post works on local [x] (not on live site)
+Password reset [x] - works on live site
+Voting both comments and post [x] - works on live and local 
 
 USER!
 Password verification [x]
@@ -69,13 +70,13 @@ ADD model:              []
 ADD controllers:        []
 ADD routing:            []
 
-REDIRECTS
+FIX REDIRECTS
 Add redirects to:
 comments:   []
 posts:      []
 delete:     []
 
-REPLIES!
+FUTURE ADDS REPLIES!
 ADD model:              []
 ADD controllers:        []
 ADD routing:            []
