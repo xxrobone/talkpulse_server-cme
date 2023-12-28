@@ -34,3 +34,21 @@ export const verifyEmail = async (username: string, email: string, token: string
         console.log(error);
     }
 }
+
+export const passwordResetEmail = async (email: string, token: string) => {
+    try {
+      const encodedEmail = encodeURIComponent(email);
+      const encodedToken = encodeURIComponent(token);
+  
+      await transporter.sendMail({
+        from: process.env.EMAIL_USER,
+        to: email,
+        subject: `Password reset request from babble`,
+        html: `${process.env.BASE_URL}/resetpassword/${encodedEmail}/${encodedToken}`,
+      });
+  
+      console.log(`Password reset email sent to: ${email}`);
+    } catch (error) {
+      console.error('Error sending password reset email:', error);
+    }
+  };

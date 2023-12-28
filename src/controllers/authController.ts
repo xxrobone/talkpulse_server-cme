@@ -3,8 +3,9 @@ import User from "../models/user.model";
 import bcrypt from 'bcrypt';
 import jwt from "jsonwebtoken";
 import { assertDefined } from "../utils/asserts";
-import {verifyEmail} from "../services/EmailVerification";
+import {verifyEmail, passwordResetEmail} from "../services/EmailVerification";
 
+// SIGN UP
 export const signUp = async (req: Request, res: Response) => {
     const { username, password, email } = req.body;
 
@@ -37,7 +38,7 @@ export const signUp = async (req: Request, res: Response) => {
     }
 }
 
-
+// ACCOUNT VERIFYCATION
 export const verifyAccount = async (req: Request, res: Response) => {
     const { username, token } = req.params;
 
@@ -66,32 +67,33 @@ export const verifyAccount = async (req: Request, res: Response) => {
     }
 };
 
+// LOG-IN - SIGN-IN
 export const logIn = async (req: Request, res: Response) => {
     console.log(req.userId);
     try {
-        // Ta in användarnamn och lösen
+        // Get username and password from request body
         const { username, password } = req.body;
 
-        // Hitta en användare
+        // Find the user
         const user = await User.findOne({username: username}, '+password');
 
-        // Kolla att vi har en användare och om lösenordet matchar det i databasen.
+        // Check so user exists and password is a match
         if (!user || !await bcrypt.compare(password, user.password)) {
             return res.status(400).json({ message: 'Wrong username or password' });
         }
 
         if (user.confirmed === false) {
-            return res.status(400).json({ message: 'Account not confirmed' });
+            return res.status(400).json({ message: 'Account not confirmed, please check your email for confirmation' });
         }
         
         assertDefined(process.env.JWT_SECRET)
         
-        // Returnera JWT
+        // Return JWT
         const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
         
         assertDefined(process.env.REFRESH_TOKEN_SECRET)
 
-        // Returnera refreshtoekn
+        // Return refreshtoken
         const refreshToken = jwt.sign({ userId: user._id }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1d' });
 
 
@@ -113,12 +115,12 @@ export const refreshJWT = async (req: Request, res: Response) => {
     }
 
     try {
-    // Returnera refreshtoekn
+    // Return refreshtoken
     const decodedPayload = await jwt.verify(refreshToken, refreshTokenSecret) as {userId: string};  
 
     assertDefined(process.env.JWT_SECRET)
     
-    // Returnera JWT
+    // Return JWT
     const token = jwt.sign({ userId: decodedPayload.userId }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
     return res.status(200).json({
@@ -131,7 +133,7 @@ export const refreshJWT = async (req: Request, res: Response) => {
 }  
 
 
-// up next
+// UPDATING PROFILE
 export const updateProfile = async (req: Request, res: Response) => {
     const { userId } = req
 
@@ -148,3 +150,80 @@ export const updateProfile = async (req: Request, res: Response) => {
         password: user.password
     })
 }
+
+// PASSWORD RESET REQUEST - forgot password
+export const requestPasswordReset = async (req: Request, res: Response) => {
+    const { email } = req.body;
+    console.log('Email received:', email);
+  
+    try {
+      // Check if the user exists
+      const userFound = await User.findOne({ email });
+  
+      console.log('User found:', userFound);
+  
+      if (!userFound) {
+        return res.status(404).json({ message: 'User not found in the database' });
+      }
+  
+      // Generate a reset token
+      const secret = process.env.PASSWORD_RESET_TOKEN;
+  
+      console.log('Secret:', secret);
+  
+      if (!secret) {
+        return res.status(500).json({ message: 'Internal Server Error - Missing secret' });
+      }
+  
+      const resetToken = jwt.sign({ email }, secret, { expiresIn: '1h' });
+      console.log('Reset token:', resetToken);
+  
+      if (!resetToken) {
+        return res.status(500).json({ message: 'Internal Server Error - Unable to generate token' });
+      }
+  
+      // Send reset password email
+      await passwordResetEmail(email, resetToken);
+  
+      return res.json({ message: 'Password reset email sent successfully' });
+    } catch (error) {
+      console.error('Error during password reset request:', error);
+      return res.status(500).json({ message: 'Internal Server Error' });
+    }
+};
+  
+//
+export const resetPassword = async (req: Request, res: Response) => {
+    const { email, token, newPassword } = req.body;
+  
+    try {
+      // Verify the reset token
+      const secret = process.env.PASSWORD_RESET_TOKEN;
+      assertDefined(secret);
+  
+      const decodedToken = jwt.verify(token, secret) as { email: string };
+  
+      // Check if the decoded email matches the provided email
+      if (decodedToken.email !== email) {
+        return res.status(400).json({ message: 'Invalid reset token' });
+      }
+  
+      // Update user password
+      const user = await User.findOne({ email });
+  
+      if (!user) {
+        return res.status(404).json({ message: 'User not found in the database' });
+      }
+  
+      // Set the new password using bcrypt
+      user.password = await bcrypt.hash(newPassword, 10);
+      await user.save();
+  
+      return res.json({ message: 'Password reset successful' });
+    } catch (error) {
+      console.error('Error during password reset:', error);
+      return res.status(500).json({ message: 'Internal Server Error' });
+    }
+  };
+  
+  
