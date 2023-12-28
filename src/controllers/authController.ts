@@ -192,7 +192,7 @@ export const requestPasswordReset = async (req: Request, res: Response) => {
     }
 };
   
-//
+// RESET PASSWORD
 export const resetPassword = async (req: Request, res: Response) => {
     const { email, token, newPassword } = req.body;
   
@@ -201,22 +201,15 @@ export const resetPassword = async (req: Request, res: Response) => {
       const secret = process.env.PASSWORD_RESET_TOKEN;
       assertDefined(secret);
   
-      const decodedToken = jwt.verify(token, secret) as { email: string };
-  
-      // Check if the decoded email matches the provided email
-      if (decodedToken.email !== email) {
-        return res.status(400).json({ message: 'Invalid reset token' });
-      }
-  
-      // Update user password
+      // Check if a user with the provided email exists
       const user = await User.findOne({ email });
   
       if (!user) {
         return res.status(404).json({ message: 'User not found in the database' });
       }
   
-      // Set the new password using bcrypt
-      user.password = await bcrypt.hash(newPassword, 10);
+      // Set the new password (will be automatically hashed by the pre-save hook)
+      user.password = newPassword;
       await user.save();
   
       return res.json({ message: 'Password reset successful' });
@@ -225,5 +218,7 @@ export const resetPassword = async (req: Request, res: Response) => {
       return res.status(500).json({ message: 'Internal Server Error' });
     }
   };
+  
+  
   
   

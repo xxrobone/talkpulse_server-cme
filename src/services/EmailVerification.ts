@@ -44,7 +44,7 @@ export const passwordResetEmail = async (email: string, token: string) => {
         from: process.env.EMAIL_USER,
         to: email,
         subject: `Password reset request from babble`,
-        html: `${process.env.BASE_URL}/resetpassword/${encodedEmail}/${encodedToken}`,
+        html: `${process.env.BASE_URL}/reset-password/${encodedEmail}/${encodedToken}`,
       });
   
       console.log(`Password reset email sent to: ${email}`);

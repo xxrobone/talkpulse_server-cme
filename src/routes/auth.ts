@@ -13,7 +13,7 @@ router.post('/token/refresh', authController.refreshJWT)
 router.post('/verifyAccount/:username/:token', authController.verifyAccount)
 
 router.post('/forgotpassword', authController.requestPasswordReset);
-router.post('/resetpassword/:email/:token', authController.resetPassword);
+router.post('/resetpassword', authController.resetPassword);
 
 router.post('/profile', validateToken, authController.updateProfile)
 
