@@ -65,16 +65,15 @@ USER!
 Password verification [x]
 Password reset [x]
 
+IMAGES! 
+Add images []
+
+
 SUBREDDITS!
 ADD model:              []
 ADD controllers:        []
 ADD routing:            []
 
-FIX REDIRECTS
-Add redirects to:
-comments:   []
-posts:      []
-delete:     []
 
 FUTURE ADDS REPLIES!
 ADD model:              []
