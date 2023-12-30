@@ -1,12 +1,15 @@
 import { Router } from 'express';
 import validateToken from '../middleware/authMiddleware';
+import multer from 'multer';
 import * as postController from '../controllers/postController'
 
 const router = Router();
 
-  
+// multer storage 
+const storage = multer.memoryStorage(); 
+const upload = multer({ storage });
 
-router.post('/posts', validateToken, postController.create);
+router.post('/posts', validateToken, upload.single('image'), postController.create);
 router.get('/posts', postController.getAllPosts);
 router.get('/posts/:postId', postController.getPost);
 router.put('/posts/:postId/update', validateToken, postController.updatePost);

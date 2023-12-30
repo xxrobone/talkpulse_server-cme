@@ -5,6 +5,7 @@ interface IPost extends Document {
   title: string;
   link?: string;
   body?: string;
+  image?: string;
   author: Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
@@ -34,6 +35,9 @@ const PostSchema = new Schema<IPost, IPostModel>(
       trim: true,
     },
     body: {
+      type: String,
+    },
+    image: {
       type: String,
     },
     author: {

@@ -2,22 +2,37 @@ import { Request, Response } from 'express';
 import Post from '../models/post.model';
 import { assertDefined } from '../utils/asserts';
 
+
+// CREATE POST
 export const create = async (req: Request, res: Response) => {
   assertDefined(req.userId);
   const { title, link, body } = req.body;
+
+  let image = '';
+
+  // Check if there is an image in the request
+  if (req.file) {
+    const imageBuffer = req.file.buffer;
+    image = imageBuffer.toString('base64');
+    console.log('Image found in request:', image);
+  } else {
+    console.log('No image found in request.');
+  }
 
   const post = new Post({
     title,
     link,
     body,
     author: req.userId,
+    image,
   });
 
   try {
     const savedPost = await post.save();
+    console.log('Post created successfully:', savedPost);
     res.status(201).json(savedPost);
   } catch (error) {
-    console.log(error);
+    console.error('Error saving post:', error);
     res.status(500).json({ message: 'Failed to create post' });
   }
 };
