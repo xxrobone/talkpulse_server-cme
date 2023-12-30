@@ -80,24 +80,27 @@ export const getPost = async (req: Request, res: Response) => {
 // UPDATE ONE BY ID
 export const updatePost = async (req: Request, res: Response) => {
   assertDefined(req.userId);
+
   try {
+    let updatedImage = '';
     const post = await Post.findById(req.params.postId);
 
     if (post?.author.toString() === req.userId) {
       const updatedFields: { [key: string]: string } = {};
 
-      // Conditional to check if there is an updated version of the title, link, body, or image
-      if (req.body.title !== undefined) updatedFields.title = req.body.title;
-      if (req.body.link !== undefined) updatedFields.link = req.body.link;
-      if (req.body.body !== undefined) updatedFields.body = req.body.body;
+      // conditional to check if there is an updated version of the title, link, or body
+      if (req.body.title) updatedFields.title = req.body.title;
+      if (req.body.link) updatedFields.link = req.body.link;
+      if (req.body.body) updatedFields.body = req.body.body;
 
-      // Check if there is an image in the request
-      if (req.body.image !== undefined) {
-        // Assuming req.body.image is already a base64 string
-        console.log('Image found in request:', req.body.image);
-        updatedFields.image = req.body.image;
+      // check if there is a new image in the request
+      if (req.file) {
+        const imageBuffer = req.file.buffer;
+        updatedImage = imageBuffer.toString('base64');
+        updatedFields.image = updatedImage;
+        console.log('New image found in request:', updatedImage);
       } else {
-        console.log('No image found in request.');
+        console.log('No new image found in request.');
       }
 
       const updatedPost = await Post.findByIdAndUpdate(
@@ -115,8 +118,46 @@ export const updatePost = async (req: Request, res: Response) => {
     res.status(500).json({ message: 'Failed to update post' });
   }
 };
+/* export const updatePost = async (req: Request, res: Response) => {
+  assertDefined(req.userId);
 
 
+  try {
+    let updatedImage = '';
+    const post = await Post.findById(req.params.postId);
+
+    if (post?.author.toString() === req.userId) {
+      const updatedFields: { [key: string]: string } = {};
+
+      if (req.body.title) updatedFields.title = req.body.title;
+      if (req.body.link) updatedFields.link = req.body.link;
+      if (req.body.body) updatedFields.body = req.body.body;
+      if (req.body.file) {
+          const imageBuffer = req.body.file.buffer;
+          updatedImage = imageBuffer.toString('base64');
+          updatedFields.image = updatedImage
+          console.log('Image found in request:', updatedImage);
+        } else {
+          console.log('No image found in request.');
+        }
+
+      const updatedPost = await Post.findByIdAndUpdate(
+        req.params.postId,
+        { $set: updatedFields },
+        { new: true }
+      );
+
+      res.status(200).json(updatedPost);
+    } else {
+      res.status(401).json('You are not allowed to update this Post');
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: 'Failed to update post' });
+  }
+};
+
+ */
 
 
 

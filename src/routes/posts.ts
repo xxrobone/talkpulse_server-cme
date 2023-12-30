@@ -12,7 +12,7 @@ const upload = multer({ storage });
 router.post('/posts', validateToken, upload.single('image'), postController.create);
 router.get('/posts', postController.getAllPosts);
 router.get('/posts/:postId', postController.getPost);
-router.put('/posts/:postId/update', validateToken, postController.updatePost);
+router.put('/posts/:postId/update', upload.single('image'), validateToken, postController.updatePost);
 router.delete('/posts/:postId/delete', validateToken, postController.deletePost);
 
 export = router;
