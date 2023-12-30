@@ -37,6 +37,7 @@ export const create = async (req: Request, res: Response) => {
   }
 };
 
+// GET ALL POSTS
 export const getAllPosts = async (req: Request, res: Response) => {
   const limit = parseInt(req.query.limit?.toString() || '5');
   const page = parseInt(req.query.page?.toString() || '1');
@@ -61,6 +62,7 @@ export const getAllPosts = async (req: Request, res: Response) => {
   });
 };
 
+// GET POST BY ID
 export const getPost = async (req: Request, res: Response) => {
   const { postId } = req.params;
 
@@ -84,7 +86,48 @@ export const updatePost = async (req: Request, res: Response) => {
     if (post?.author.toString() === req.userId) {
       const updatedFields: { [key: string]: string } = {};
 
-      // conditional to check if there is an updated version of the title, link or body
+      // Conditional to check if there is an updated version of the title, link, body, or image
+      if (req.body.title !== undefined) updatedFields.title = req.body.title;
+      if (req.body.link !== undefined) updatedFields.link = req.body.link;
+      if (req.body.body !== undefined) updatedFields.body = req.body.body;
+
+      // Check if there is an image in the request
+      if (req.body.image !== undefined) {
+        // Assuming req.body.image is already a base64 string
+        console.log('Image found in request:', req.body.image);
+        updatedFields.image = req.body.image;
+      } else {
+        console.log('No image found in request.');
+      }
+
+      const updatedPost = await Post.findByIdAndUpdate(
+        req.params.postId,
+        { $set: updatedFields },
+        { new: true }
+      );
+
+      res.status(200).json(updatedPost);
+    } else {
+      res.status(401).json('You are not allowed to update this Post');
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: 'Failed to update post' });
+  }
+};
+
+
+
+
+
+/* export const updatePost = async (req: Request, res: Response) => {
+  assertDefined(req.userId);
+  try {
+    const post = await Post.findById(req.params.postId);
+
+    if (post?.author.toString() === req.userId) {
+      const updatedFields: { [key: string]: string } = {};
+
       if (req.body.title) updatedFields.title = req.body.title;
       if (req.body.link) updatedFields.link = req.body.link;
       if (req.body.body) updatedFields.body = req.body.body;
@@ -103,7 +146,7 @@ export const updatePost = async (req: Request, res: Response) => {
     console.log(error);
     res.status(500).json({ message: 'Failed to update post' });
   }
-};
+}; */
 
 // DELETE ONE BY ID
 export const deletePost = async (req: Request, res: Response) => {
