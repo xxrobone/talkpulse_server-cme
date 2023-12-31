@@ -1,4 +1,4 @@
-# This is the backend / server for TalkPulse
+# 
 
 
 Creating a mern stack app - reddit inspired
@@ -66,18 +66,18 @@ Password verification [x]
 Password reset [x]
 
 IMAGES! 
-Add images []
+Add images [x]
+Update images [x]
 
 
+Future features // 
 SUBREDDITS!
 ADD model:              []
 ADD controllers:        []
 ADD routing:            []
 
 
-FUTURE ADDS REPLIES!
+REPLIES!
 ADD model:              []
 ADD controllers:        []
 ADD routing:            []
-
-ADDIONAL STYLING
