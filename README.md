@@ -9,9 +9,6 @@ Hosted on Render, you can check their page here: https://render.com/
 ## Frontend for this project
 Frontend part of the project: https://github.com/xxrobone/talkpulse-cme
 
-# PREVIEW
-### Talk Pulse App 
-<img src="assets/talkpulse.gif" alt="Project image" width="150">
 
 ## Features included
 
