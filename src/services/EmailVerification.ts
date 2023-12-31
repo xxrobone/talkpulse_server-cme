@@ -21,7 +21,7 @@ export const verifyEmail = async (username: string, email: string, token: string
         let info = await transporter.sendMail({
             from: process.env.EMAIL_USER,
             to: email,
-            subject: `Hello ${username} please verify your email to gain access to Tchat and activate your account by clicking the link`,
+            subject: `Hello ${username} please verify your email to gain access to Talk Pulse and activate your account by clicking the link`,
             html: `${process.env.BASE_URL}/verify-account/${encodedUsername}/${encodedToken}`,
         }, (error: any, result: any) => {
             if (error) {
@@ -43,7 +43,7 @@ export const passwordResetEmail = async (email: string, token: string) => {
       await transporter.sendMail({
         from: process.env.EMAIL_USER,
         to: email,
-        subject: `Password reset request from babble`,
+        subject: `Password reset request from Talk pulse`,
         html: `${process.env.BASE_URL}/reset-password/${encodedEmail}/${encodedToken}`,
       });
   
