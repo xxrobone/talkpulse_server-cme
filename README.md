@@ -29,6 +29,8 @@ Structure (to follow, might change it)
 │   │   ├── authController.ts
 │   │   |── postController.ts
 |   |   |── commentController.ts
+|   |   |── userController.ts
+|   |   |── votesController.ts
 │   ├── middleware
 │   │   └── authMiddleware.ts
 │   ├── models
@@ -39,8 +41,7 @@ Structure (to follow, might change it)
 |   |   ├── authRoutes.ts
 │   │   |── postRoutests
 |   |   |── commentRoutes.ts
-│   ├── config
-│   │   └── config.ts
+|   |   |── userRoutes.ts
 │   ├── helpers
 │   │   └── helpers.ts
 │   ├── types
@@ -53,8 +54,6 @@ Structure (to follow, might change it)
 └── tsconfig.json
 ```
 
-
-NEXT UP NODEMAILER!!!
 
 TODO:
 Verification [x] - working on live site
@@ -69,8 +68,10 @@ IMAGES!
 Add images [x]
 Update images [x]
 
-
 Future features // 
+
+User logout after token expires or refresh token activation []
+
 SUBREDDITS!
 ADD model:              []
 ADD controllers:        []
@@ -81,3 +82,6 @@ REPLIES!
 ADD model:              []
 ADD controllers:        []
 ADD routing:            []
+
+USER!
+User profile updates []
