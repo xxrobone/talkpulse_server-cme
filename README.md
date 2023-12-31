@@ -2,13 +2,9 @@
 
 ## This is a school project MERN stack assignment
 
-DEMO: https://talkpulse.onrender.com/
-
-Hosted on Render, you can check their page here: https://render.com/
-
 ## Frontend for this project
 Frontend part of the project: https://github.com/xxrobone/talkpulse-cme
-
+- You can see a preview & demo of the live project in the frontend part of the project
 
 ## Features included
 
@@ -20,16 +16,17 @@ Frontend part of the project: https://github.com/xxrobone/talkpulse-cme
 - Auth using JsonWebTokens
 - User email verification and reset password
 
-### Posts (User log-in)
+### Posts (User signed in)
 - User can create, update and delete own posts 
 - "Real time" updates with React Router using loaders (reads) and actions (writes)
 
 ### Comment & Votes
-- Comments and votes if user is signed in
+- User can add comments and votes if user is signed in
 
 ## Features not included
-- ~~Subreddits~~ 
-- ~~Additional features or libraries for realtime like socket.io, websockets or swr~~
+- Additional features
+- Libraries for realtime like socket.io, websockets or swr
+- Subreddits
 
 ## ? Wanna try the project or use it as a start for something bigger or just play with the code feel free to do so ?
 
@@ -99,8 +96,11 @@ DELETE http://localhost:8000/posts/657ff161fe7794cf84a2f48c (just and example, t
 ```sh
 You dont need no body, only the post id in the params to delete the post
 ```
-Comments and Votes work similar way you need the bearer token and the enpoints
-You can find all routes in the routes folder in the files auth, comments, posts, votes, and users(not yet using it)
+## Comments and Votes 
+work similar way you need the bearer token and the endpoints
+<br>
+
+- You can find all routes in the routes folder in the files auth, comments, posts, votes, and users(not yet using it)
 
 Then use the token in the Authorization tab choose - Bearer Token
 
@@ -124,7 +124,7 @@ To Start the server:
 npm run dev
 ```
 
-You need to set up your own .env file, check the file env.example to see which env variables are used in this project
+- You need to set up your own .env file, check the file env.example to see which env variables are used in this project
 
 ## TECH USED IN THIS PROJECT:
 - MongoDB – Database NoSql 
@@ -158,53 +158,107 @@ Folder file Structure (to follow, I might change it)
 |   |   ├── user.model.ts
 │   │   |── post.model.ts
 |   |   |── comment.model.ts
+|   |   |── user.model.ts
 │   ├── routes
 |   |   ├── authRoutes.ts
 │   │   |── postRoutests
 |   |   |── commentRoutes.ts
 |   |   |── userRoutes.ts
-│   ├── helpers
-│   │   └── helpers.ts
+│   ├── services
+│   │   └── Emailverification.ts
 │   ├── types
 │   │   └── types.ts
 │   ├── utils
 │   │   └── bcrypt as utils.ts (all utils functions)
+│   └── db.ts
 │   └── index.ts
 ├── .env
 ├── package.json
 └── tsconfig.json
+│  
+└── additional files and folers
 ```
 
+<br>
+ 
 
-Just my notes don't mind these...
+ <br>
 
-TODO:
-Verification [x] - working on live site
-Password reset [x] - works on live site
-Voting both comments and post [x] - works on live and local 
+ ---
 
-USER!
-Password verification [x]
-Password reset [x]
-
-IMAGES! 
-Add images [x]
-Update images [x]
-
-Future features // 
-
-User logout after token expires or refresh token activation []
-
-SUBREDDITS!
-ADD model:              []
-ADD controllers:        []
-ADD routing:            []
+ 
 
 
-REPLIES!
-ADD model:              []
-ADD controllers:        []
-ADD routing:            []
+<p align="left">
+<a href="https://www.linkedin.com/in/robert-w%C3%A4gar-1b4661139/" target="blank"><img align="center" src="https://github.com/xxrobone/dablog/blob/main/readmeimages/LinkedIN.png" alt="" height="30" /></a>
+<a href="https://github.com/robonexx" target="blank"><img align="center" src="https://github.com/xxrobone/dablog/blob/main/readmeimages/Github.png" alt="" height="30" /></a>
+<a href="https://codepen.io/robertwagar" target="blank"><img align="center" src="https://github.com/xxrobone/dablog/blob/main/readmeimages/Codeopen.png" alt="" height="30" /></a>
+<img align="center" src="socials/Discord.png" alt="" height="30" />
+</p>
 
-USER!
-User profile updates []
+
+
+### Have and Idea you want to bring to life?
+- 💬 Reach out and lets have a chat?
+
+#### You can reach me at:
+
+✉️ robertwagar@gmail.com
+
+<br>
+<br>
+
+ ---
+## Future features
+
+### User
+
+- [ ] User logout after token expires or refresh token activation
+
+### SUBREDDITS
+
+- [ ] ADD model
+- [ ] ADD controllers
+- [ ] ADD routing
+
+### REPLIES
+
+- [ ] ADD model
+- [ ] ADD controllers
+- [ ] ADD routing
+
+### USER
+
+- [ ] Profile page / settings page
+
+<br> 
+<br>
+<br>
+<br> 
+<br>
+<br>
+
+
+
+#### Just my notes don't mind these...
+
+## My TODO List
+
+- [x] Verification - working on live site
+- [x] Password reset - working on live site
+- [x] Votes post & comments - working on live site
+
+### IMAGES
+
+- [x] Add images
+- [x] Update images
+
+### Add redirects / close functions to:
+
+- [x] comments
+- [x] posts
+- [x] delete
+
+### Styling fixes update forms
+
+- [x] Styling fixes update forms
