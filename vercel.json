@@ -1,0 +1,15 @@
+{
+    "version": 3,
+    "builds": [
+        {
+            "src": "dist/src/index.js",
+            "use": "@now/node"
+        }
+    ],
+    "routes": [
+        {
+            "src": "/{.*}",
+            "dest": "dist/src/index.js"
+        }
+    ]
+}
