@@ -8,6 +8,7 @@ import postsRoute from './routes/posts';
 import commentsRoute from './routes/comments';
 import userRoute from './routes/users';
 import votesRoute from './routes/votes';
+import baseRoute from './routes/base'
 
 dotenv.config();
 
@@ -16,15 +17,18 @@ const app: Express = express();
 app.use(cors());
 app.use(express.json());
 
+
 // Connect to the database
 connectDB().then(() => {
   // Routes
+  app.use('/', baseRoute);
   app.use('/', authRoute);
   app.use('/', postsRoute);
   app.use('/', commentsRoute);
   app.use('/', userRoute);
   app.use('/', votesRoute);
 
+ 
   const port = parseInt(process.env.PORT || '8000');
   app.listen(port, () => {
     console.log('Server listening on port ' + port);
