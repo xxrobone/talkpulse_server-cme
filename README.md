@@ -211,6 +211,9 @@ Folder file Structure (to follow, I might change it)
  ---
 ## Future features
 
+### Deploy on vercel
+- [ ] 
+
 ### User
 
 - [ ] User logout after token expires or refresh token activation
