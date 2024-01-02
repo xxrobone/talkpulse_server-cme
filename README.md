@@ -262,3 +262,6 @@ Folder file Structure (to follow, I might change it)
 ### Styling fixes update forms
 
 - [x] Styling fixes update forms
+
+### Error and Success message handling
+- [ ] Response messages
