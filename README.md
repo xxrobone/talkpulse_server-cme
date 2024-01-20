@@ -211,7 +211,9 @@ Folder file Structure (to follow, I might change it)
  ---
 ## Future features
 
-### Deploy on vercel
+### TESTS and checks should be added for a  more robust backend, was not part of the assignment and not enough time to add it all
+### I wish i could have mulitplied myself and have a fullstack perfect app, but due to reality and not living in a fictional world
+### Sadly I did not have time to add it all. 
 - [ ] 
 
 ### User
